@@ -1,45 +1,23 @@
 import { useState, useEffect } from 'react';
 import type { PowerliftingRecord } from '../types/records';
-import { loadRecords, importRecords as saveImportedRecords } from '../utils/recordsStorage';
+import { records } from '../data/records';
 
 export const useRecordsData = () => {
   const [allRecords, setAllRecords] = useState<PowerliftingRecord[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [lastUpdated, setLastUpdated] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = () => {
-    setIsLoading(true);
-    try {
-      const data = loadRecords();
-      setAllRecords(data.records);
-      setLastUpdated(data.lastUpdated);
-    } catch (error) {
-      console.error('Error loading records:', error);
-    } finally {
+    // Simulate loading for smooth UX
+    const timer = setTimeout(() => {
+      setAllRecords(records);
       setIsLoading(false);
-    }
-  };
+    }, 300);
 
-  const importRecords = (jsonData: PowerliftingRecord[]) => {
-    try {
-      saveImportedRecords(jsonData);
-      setAllRecords(jsonData);
-      setLastUpdated(new Date().toISOString());
-    } catch (error) {
-      console.error('Error importing records:', error);
-      throw error;
-    }
-  };
+    return () => clearTimeout(timer);
+  }, []);
 
   return {
     allRecords,
-    isLoading,
-    lastUpdated,
-    importRecords,
-    reloadRecords: loadData
+    isLoading
   };
 };

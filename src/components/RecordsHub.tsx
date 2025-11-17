@@ -4,10 +4,9 @@ import { useRecordsData } from '../hooks/useRecordsData';
 import { useRecordsFilter } from '../hooks/useRecordsFilter';
 import FilterPanel from './FilterPanel';
 import ResultsDisplay from './ResultsDisplay';
-import RecordsImport from './RecordsImport';
 
 const RecordsHub: React.FC<RecordsHubProps> = () => {
-  const { allRecords, isLoading, lastUpdated, importRecords } = useRecordsData();
+  const { allRecords, isLoading } = useRecordsData();
   const {
     filters,
     filteredRecords,
@@ -18,14 +17,8 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
     hasActiveFilters
   } = useRecordsFilter(allRecords);
 
-  const handleImport = (records: any[]) => {
-    importRecords(records);
-  };
-
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-16">
-      <RecordsImport onImport={handleImport} lastUpdated={lastUpdated} />
-
       <FilterPanel
         filters={filters}
         onFilterChange={updateFilter}
