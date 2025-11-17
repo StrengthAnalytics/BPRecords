@@ -17,12 +17,12 @@ const IconButton: React.FC<IconButtonProps> = ({
   className = '',
   type = 'button'
 }) => {
-  const baseClasses = 'px-5 py-3 rounded-lg font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed text-lg';
+  const baseClasses = 'px-8 py-4 rounded-xl font-bold text-lg transition-all focus:outline-none focus:ring-4 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:-translate-y-0.5';
 
   const variantClasses = {
-    primary: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500 dark:bg-red-600 dark:hover:bg-red-700',
-    secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-900 focus:ring-gray-500 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-50',
-    danger: 'bg-red-800 hover:bg-red-900 text-white focus:ring-red-600 dark:bg-red-800 dark:hover:bg-red-900'
+    primary: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500/50 dark:bg-red-600 dark:hover:bg-red-700',
+    secondary: 'bg-gray-200 hover:bg-gray-300 text-gray-900 focus:ring-gray-500/50 dark:bg-slate-700 dark:hover:bg-slate-600 dark:text-slate-50 shadow-md',
+    danger: 'bg-red-800 hover:bg-red-900 text-white focus:ring-red-600/50 dark:bg-red-800 dark:hover:bg-red-900'
   };
 
   return (

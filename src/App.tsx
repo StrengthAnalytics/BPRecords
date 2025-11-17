@@ -45,11 +45,15 @@ function App() {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 text-white py-12 px-4 text-center">
-        <h1 className="text-5xl font-bold mb-4">British Powerlifting Records</h1>
-        <p className="text-xl text-red-100 max-w-2xl mx-auto">
-          Search and explore national and regional powerlifting records across all weight classes and categories
-        </p>
+      <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 text-white py-16 md:py-24 px-4 text-center shadow-2xl">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight">
+            British Powerlifting Records
+          </h1>
+          <p className="text-lg md:text-2xl text-red-50 font-light leading-relaxed">
+            Search and explore national and regional powerlifting records across all weight classes and federations
+          </p>
+        </div>
       </div>
 
       {/* Main Content */}

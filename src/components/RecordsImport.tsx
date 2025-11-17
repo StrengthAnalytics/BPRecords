@@ -75,13 +75,13 @@ const RecordsImport: React.FC<RecordsImportProps> = ({ onImport, lastUpdated }) 
 
   return (
     <Section title="Import Records" emoji="📁">
-      <div className="space-y-4">
-        <p className="text-gray-600 dark:text-slate-400">
+      <div className="space-y-6">
+        <p className="text-lg text-gray-700 dark:text-slate-300 leading-relaxed">
           Import powerlifting records from a JSON file. The file should contain an array of record objects
           with the required fields.
         </p>
 
-        <div className="flex gap-4 items-center flex-wrap">
+        <div className="flex gap-6 items-center flex-wrap">
           <input
             ref={fileInputRef}
             type="file"
@@ -94,29 +94,30 @@ const RecordsImport: React.FC<RecordsImportProps> = ({ onImport, lastUpdated }) 
           </IconButton>
 
           {lastUpdated && (
-            <span className="text-sm text-gray-600 dark:text-slate-400">
-              Last updated: <span className="font-medium">{formatLastUpdated(lastUpdated)}</span>
+            <span className="text-base text-gray-700 dark:text-slate-300">
+              Last updated: <span className="font-bold text-red-600 dark:text-red-400">{formatLastUpdated(lastUpdated)}</span>
             </span>
           )}
         </div>
 
         {error && (
-          <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400">
-            <p className="font-medium">❌ {error}</p>
+          <div className="p-5 bg-red-50 dark:bg-red-900/20 border-2 border-red-400 dark:border-red-600 rounded-xl text-red-800 dark:text-red-300 shadow-lg">
+            <p className="font-bold text-lg">❌ {error}</p>
           </div>
         )}
 
         {success && (
-          <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-300 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400">
-            <p className="font-medium">✅ {success}</p>
+          <div className="p-5 bg-green-50 dark:bg-green-900/20 border-2 border-green-400 dark:border-green-600 rounded-xl text-green-800 dark:text-green-300 shadow-lg">
+            <p className="font-bold text-lg">✅ {success}</p>
           </div>
         )}
 
-        <details className="text-sm">
-          <summary className="cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
-            View expected JSON format →
+        <details className="group">
+          <summary className="cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-bold text-base list-none flex items-center gap-2">
+            <span className="group-open:rotate-90 transition-transform">▶</span>
+            View expected JSON format
           </summary>
-          <pre className="mt-3 p-4 bg-gray-100 dark:bg-slate-900 rounded-lg overflow-x-auto text-xs border border-gray-300 dark:border-slate-700">
+          <pre className="mt-4 p-5 bg-gray-100 dark:bg-slate-900 rounded-xl overflow-x-auto text-sm border-2 border-gray-300 dark:border-slate-700 shadow-inner">
 {`[
   {
     "region": "England",

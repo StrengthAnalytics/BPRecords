@@ -42,35 +42,35 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   return (
     <Section title={records.length > 0 ? `Results (${records.length})` : 'Results'} emoji="📊">
       {records.length > 0 && (
-        <div className="mb-6 flex gap-2 items-center flex-wrap">
-          <span className="text-sm font-medium text-gray-700 dark:text-slate-300">Sort by:</span>
-          <div className="flex gap-2">
+        <div className="mb-10 flex gap-4 items-center flex-wrap">
+          <span className="text-lg font-bold text-gray-900 dark:text-slate-100">Sort by:</span>
+          <div className="flex gap-3">
             <button
               onClick={() => onSortChange('weight')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg ${
                 sortBy === 'weight'
-                  ? 'bg-red-600 text-white dark:bg-red-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
+                  ? 'bg-red-600 text-white dark:bg-red-600 scale-105'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
               }`}
             >
               Weight
             </button>
             <button
               onClick={() => onSortChange('date')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg ${
                 sortBy === 'date'
-                  ? 'bg-red-600 text-white dark:bg-red-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
+                  ? 'bg-red-600 text-white dark:bg-red-600 scale-105'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
               }`}
             >
               Date
             </button>
             <button
               onClick={() => onSortChange('name')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-6 py-3 rounded-xl font-bold transition-all shadow-md hover:shadow-lg ${
                 sortBy === 'name'
-                  ? 'bg-red-600 text-white dark:bg-red-600'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
+                  ? 'bg-red-600 text-white dark:bg-red-600 scale-105'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-slate-700 dark:text-slate-300 dark:hover:bg-slate-600'
               }`}
             >
               Name
@@ -80,17 +80,17 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       )}
 
       {records.length === 0 ? (
-        <div className="text-center py-16">
-          <div className="text-6xl mb-4">📊</div>
-          <h3 className="text-xl font-semibold text-gray-600 dark:text-slate-400 mb-2">
+        <div className="text-center py-24 px-6">
+          <div className="text-8xl mb-8">📊</div>
+          <h3 className="text-3xl font-bold text-gray-700 dark:text-slate-300 mb-4">
             Ready to find records?
           </h3>
-          <p className="text-gray-500 dark:text-slate-500">
-            Select your criteria above and search to view results
+          <p className="text-xl text-gray-500 dark:text-slate-400 max-w-md mx-auto">
+            Select your criteria above and click search to view results
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {records.map((record, index) => (
             <RecordCard key={`${record.name}-${record.lift}-${index}`} record={record} />
           ))}

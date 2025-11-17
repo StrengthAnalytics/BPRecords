@@ -17,12 +17,12 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   onClear,
   hasActiveFilters
 }) => {
-  const inputClass = "w-full p-3 border-2 rounded-lg bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:focus:ring-red-600 dark:focus:border-red-600 transition-colors";
-  const labelClass = "block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2";
+  const inputClass = "w-full px-4 py-4 text-base border-2 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-4 focus:ring-red-500/20 focus:border-red-500 dark:focus:ring-red-600/20 dark:focus:border-red-600 transition-all shadow-sm hover:border-red-400 dark:hover:border-red-500";
+  const labelClass = "block text-base font-semibold text-gray-800 dark:text-slate-200 mb-3";
 
   return (
     <Section title="Find Records" emoji="🔍">
-      <div className="mb-6">
+      <div className="mb-10">
         <label className={labelClass}>Search by Lifter Name</label>
         <input
           type="text"
@@ -33,7 +33,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {/* Gender */}
         <div>
           <label className={labelClass}>Gender</label>
@@ -120,7 +120,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       </div>
 
       {hasActiveFilters && (
-        <div className="flex gap-3">
+        <div className="flex gap-4 pt-6 border-t-2 border-gray-100 dark:border-slate-700">
           <IconButton onClick={onClear} variant="secondary">
             Clear All Filters
           </IconButton>
