@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import type { FilterState } from '../types/records';
-import { REGIONS, WEIGHT_CLASSES, LIFTS, AGE_CATEGORIES, EQUIPMENT_TYPES, GENDERS } from '../types/records';
+import { REGIONS, WEIGHT_CLASSES, WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, LIFTS, AGE_CATEGORIES, EQUIPMENT_TYPES, GENDERS } from '../types/records';
 import Section from './Section';
 import IconButton from './IconButton';
 
@@ -19,6 +19,34 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 }) => {
   const inputClass = "w-full px-4 py-4 text-base border-2 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-4 focus:ring-red-500/20 focus:border-red-500 dark:focus:ring-red-600/20 dark:focus:border-red-600 transition-all shadow-sm hover:border-red-400 dark:hover:border-red-500";
   const labelClass = "block text-base font-semibold text-gray-800 dark:text-slate-200 mb-3";
+
+  // Compute weight classes based on gender and age category
+  const availableWeightClasses = useMemo(() => {
+    const isJuniorOrSubJunior = filters.ageCategory === 'Junior' || filters.ageCategory === 'Sub-Junior';
+
+    if (filters.gender === 'All') {
+      // Show all weight classes
+      return WEIGHT_CLASSES;
+    } else if (filters.gender === 'M') {
+      // Male weight classes
+      if (isJuniorOrSubJunior || filters.ageCategory === 'All') {
+        return WEIGHT_CLASSES_MALE; // Includes 53kg
+      } else {
+        // Exclude 53kg for senior categories
+        return WEIGHT_CLASSES_MALE.filter(wc => wc !== '53kg');
+      }
+    } else if (filters.gender === 'F') {
+      // Female weight classes
+      if (isJuniorOrSubJunior || filters.ageCategory === 'All') {
+        return WEIGHT_CLASSES_FEMALE; // Includes 43kg
+      } else {
+        // Exclude 43kg for senior categories
+        return WEIGHT_CLASSES_FEMALE.filter(wc => wc !== '43kg');
+      }
+    }
+
+    return WEIGHT_CLASSES;
+  }, [filters.gender, filters.ageCategory]);
 
   return (
     <Section title="Find Records" emoji="🔍">
@@ -70,7 +98,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             onChange={(e) => onFilterChange('weightClass', e.target.value)}
             className={inputClass}
           >
-            {WEIGHT_CLASSES.map(wc => (
+            {availableWeightClasses.map(wc => (
               <option key={wc} value={wc}>{wc}</option>
             ))}
           </select>

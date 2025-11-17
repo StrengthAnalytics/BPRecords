@@ -38,6 +38,7 @@ export interface RecordsHubProps {
 
 export const REGIONS = [
   'All',
+  'British',
   'England',
   'Scotland',
   'Wales',
@@ -53,12 +54,49 @@ export const REGIONS = [
   'South West'
 ];
 
-export const WEIGHT_CLASSES = [
+export const WEIGHT_CLASSES_MALE = [
   'All',
+  '53kg', // Junior/Sub-Junior only
   '59kg',
   '66kg',
   '74kg',
   '83kg',
+  '93kg',
+  '105kg',
+  '120kg',
+  '120+kg'
+];
+
+export const WEIGHT_CLASSES_FEMALE = [
+  'All',
+  '43kg', // Junior/Sub-Junior only
+  '47kg',
+  '52kg',
+  '57kg',
+  '63kg',
+  '69kg',
+  '76kg',
+  '84kg',
+  '84+kg'
+];
+
+// Legacy export - all weight classes combined
+export const WEIGHT_CLASSES = [
+  'All',
+  '43kg',
+  '47kg',
+  '52kg',
+  '53kg',
+  '57kg',
+  '59kg',
+  '63kg',
+  '66kg',
+  '69kg',
+  '74kg',
+  '76kg',
+  '83kg',
+  '84kg',
+  '84+kg',
   '93kg',
   '105kg',
   '120kg',
