@@ -74,14 +74,14 @@ const RecordsImport: React.FC<RecordsImportProps> = ({ onImport, lastUpdated }) 
   };
 
   return (
-    <Section title="Import Records">
+    <Section title="Import Records" emoji="📁">
       <div className="space-y-4">
-        <p className="text-sm text-slate-600 dark:text-slate-400">
+        <p className="text-gray-600 dark:text-slate-400">
           Import powerlifting records from a JSON file. The file should contain an array of record objects
           with the required fields.
         </p>
 
-        <div className="flex gap-3 items-center">
+        <div className="flex gap-4 items-center flex-wrap">
           <input
             ref={fileInputRef}
             type="file"
@@ -94,29 +94,29 @@ const RecordsImport: React.FC<RecordsImportProps> = ({ onImport, lastUpdated }) 
           </IconButton>
 
           {lastUpdated && (
-            <span className="text-sm text-slate-600 dark:text-slate-400">
-              Last updated: {formatLastUpdated(lastUpdated)}
+            <span className="text-sm text-gray-600 dark:text-slate-400">
+              Last updated: <span className="font-medium">{formatLastUpdated(lastUpdated)}</span>
             </span>
           )}
         </div>
 
         {error && (
-          <div className="p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 rounded text-red-700 dark:text-red-400 text-sm">
-            {error}
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-400">
+            <p className="font-medium">❌ {error}</p>
           </div>
         )}
 
         {success && (
-          <div className="p-3 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 rounded text-green-700 dark:text-green-400 text-sm">
-            {success}
+          <div className="p-4 bg-green-50 dark:bg-green-900/20 border-2 border-green-300 dark:border-green-700 rounded-lg text-green-700 dark:text-green-400">
+            <p className="font-medium">✅ {success}</p>
           </div>
         )}
 
         <details className="text-sm">
-          <summary className="cursor-pointer text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300">
-            View expected JSON format
+          <summary className="cursor-pointer text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium">
+            View expected JSON format →
           </summary>
-          <pre className="mt-2 p-3 bg-slate-100 dark:bg-slate-900 rounded overflow-x-auto text-xs">
+          <pre className="mt-3 p-4 bg-gray-100 dark:bg-slate-900 rounded-lg overflow-x-auto text-xs border border-gray-300 dark:border-slate-700">
 {`[
   {
     "region": "England",

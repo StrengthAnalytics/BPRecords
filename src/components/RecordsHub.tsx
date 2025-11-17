@@ -6,7 +6,7 @@ import FilterPanel from './FilterPanel';
 import ResultsDisplay from './ResultsDisplay';
 import RecordsImport from './RecordsImport';
 
-const RecordsHub: React.FC<RecordsHubProps> = ({ onHelpClick }) => {
+const RecordsHub: React.FC<RecordsHubProps> = () => {
   const { allRecords, isLoading, lastUpdated, importRecords } = useRecordsData();
   const {
     filters,
@@ -23,23 +23,13 @@ const RecordsHub: React.FC<RecordsHubProps> = ({ onHelpClick }) => {
   };
 
   return (
-    <div className="animate-fadeIn max-w-7xl mx-auto px-4 py-8">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
-          British Powerlifting Records Hub
-        </h1>
-        <p className="text-slate-600 dark:text-slate-400">
-          Search and explore powerlifting records across the UK
-        </p>
-      </header>
-
+    <div className="max-w-6xl mx-auto px-4 py-8">
       <RecordsImport onImport={handleImport} lastUpdated={lastUpdated} />
 
       <FilterPanel
         filters={filters}
         onFilterChange={updateFilter}
         onClear={clearFilters}
-        onHelpClick={onHelpClick}
         hasActiveFilters={hasActiveFilters}
       />
 

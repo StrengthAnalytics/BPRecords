@@ -18,17 +18,13 @@ function App() {
   }, [darkMode]);
 
   const branding: BrandingState = {
-    primaryColor: '#0066ff',
-    secondaryColor: '#0044AA',
-    accentColor: '#FF6D2D'
-  };
-
-  const handleHelpClick = () => {
-    alert('British Powerlifting Records Hub\n\nUse the filters to search for specific records. You can search by name, region, weight class, lift type, age category, equipment, and gender.\n\nImport records using a JSON file with the expected format shown in the Import section.');
+    primaryColor: '#dc2626',
+    secondaryColor: '#b91c1c',
+    accentColor: '#fecaca'
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col">
       {/* Dark Mode Toggle */}
       <div className="fixed top-4 right-4 z-50">
         <button
@@ -48,7 +44,23 @@ function App() {
         </button>
       </div>
 
-      <RecordsHub branding={branding} onHelpClick={handleHelpClick} />
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 text-white py-12 px-4 text-center">
+        <h1 className="text-5xl font-bold mb-4">British Powerlifting Records</h1>
+        <p className="text-xl text-red-100 max-w-2xl mx-auto">
+          Search and explore national and regional powerlifting records across all weight classes and categories
+        </p>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1">
+        <RecordsHub branding={branding} />
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-800 dark:bg-slate-950 text-gray-400 py-6 px-4 text-center mt-12">
+        <p>British Powerlifting Records Hub • Data compiled from official competitions</p>
+      </footer>
     </div>
   );
 }

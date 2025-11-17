@@ -8,10 +8,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        'coach-blue-start': '#0066ff',
-        'coach-blue-end': '#0044AA',
-        'lifter-orange': '#FF6D2D',
-        'record-gold': '#FFD700',
+        'bp-red': '#dc2626',
+        'bp-red-dark': '#b91c1c',
+        'bp-red-light': '#fecaca',
       },
       animation: {
         'fadeIn': 'fadeIn 0.3s ease-in',
