@@ -5,6 +5,7 @@ import { useRecordsFilter } from '../hooks/useRecordsFilter';
 import FilterPanel from './FilterPanel';
 import ResultsDisplay from './ResultsDisplay';
 import CSVConverterModal from './CSVConverterModal';
+import PDFExportModal from './PDFExportModal';
 
 const RecordsHub: React.FC<RecordsHubProps> = () => {
   const { allRecords, isLoading } = useRecordsData();
@@ -19,11 +20,20 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
   } = useRecordsFilter(allRecords);
 
   const [showConverter, setShowConverter] = useState(false);
+  const [showPDFExport, setShowPDFExport] = useState(false);
 
   // Secret trigger: typing "JSON" in the name field opens the converter
   useEffect(() => {
     if (filters.name.toUpperCase() === 'JSON') {
       setShowConverter(true);
+      updateFilter('name', ''); // Clear the name field
+    }
+  }, [filters.name, updateFilter]);
+
+  // Secret trigger: typing "PDF" in the name field opens the PDF export
+  useEffect(() => {
+    if (filters.name.toUpperCase() === 'PDF') {
+      setShowPDFExport(true);
       updateFilter('name', ''); // Clear the name field
     }
   }, [filters.name, updateFilter]);
@@ -35,6 +45,7 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
         onFilterChange={updateFilter}
         onClear={clearFilters}
         hasActiveFilters={hasActiveFilters}
+        onPDFExport={() => setShowPDFExport(true)}
       />
 
       <ResultsDisplay
@@ -47,6 +58,12 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
       <CSVConverterModal
         isOpen={showConverter}
         onClose={() => setShowConverter(false)}
+      />
+
+      <PDFExportModal
+        isOpen={showPDFExport}
+        onClose={() => setShowPDFExport(false)}
+        allRecords={allRecords}
       />
     </div>
   );
