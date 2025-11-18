@@ -14,7 +14,6 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<{ type: 'info' | 'success' | 'error'; message: string } | null>(null);
   const [convertedData, setConvertedData] = useState<RegionData | null>(null);
-  const [totalRecords, setTotalRecords] = useState(0);
 
   if (!isOpen) return null;
 
@@ -131,7 +130,6 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
       const regionData = groupByRegion(converted);
 
       setConvertedData(regionData);
-      setTotalRecords(converted.length);
       setStatus({ type: 'success', message: `Successfully converted ${converted.length} records from ${Object.keys(regionData).length} regions!` });
 
       if (fileInputRef.current) {
