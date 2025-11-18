@@ -64,7 +64,7 @@ export const WEIGHT_CLASSES_MALE = [
   '93kg',
   '105kg',
   '120kg',
-  '120+kg'
+  '120kg+'
 ];
 
 export const WEIGHT_CLASSES_FEMALE = [
@@ -77,7 +77,7 @@ export const WEIGHT_CLASSES_FEMALE = [
   '69kg',
   '76kg',
   '84kg',
-  '84+kg'
+  '84kg+'
 ];
 
 // Legacy export - all weight classes combined
@@ -96,11 +96,11 @@ export const WEIGHT_CLASSES = [
   '76kg',
   '83kg',
   '84kg',
-  '84+kg',
+  '84kg+',
   '93kg',
   '105kg',
   '120kg',
-  '120+kg'
+  '120kg+'
 ];
 
 export const LIFTS = [
