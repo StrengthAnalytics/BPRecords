@@ -144,7 +144,7 @@ function generatePortraitPDF(
     });
 
     // Include weight class in the header row
-    autoTable(doc, {
+    const tableConfig: any = {
       startY: yPosition,
       head: [[`${weightClass}`, ...ageCategories]],
       body: tableData,
@@ -174,12 +174,20 @@ function generatePortraitPDF(
         },
       },
       margin: { left: 10, right: 10 },
-      tableWidth: isYouthOnly ? 'auto' : undefined,
       tableLineWidth: 0.1,
-      didDrawPage: (data) => {
+      didDrawPage: (data: any) => {
         yPosition = data.cursor!.y + (isYouthOnly ? 2 : 2.5);
       },
-    });
+    };
+
+    // For youth-only classes, set fixed column widths to limit horizontal spread
+    if (isYouthOnly) {
+      tableConfig.columnStyles[1] = { cellWidth: 28 };
+      tableConfig.columnStyles[2] = { cellWidth: 28 };
+      tableConfig.columnStyles[3] = { cellWidth: 28 };
+    }
+
+    autoTable(doc, tableConfig);
   });
 }
 
@@ -229,7 +237,7 @@ function generateLandscapePDF(
     });
 
     // Include weight class in the header row
-    autoTable(doc, {
+    const tableConfig: any = {
       startY: yPosition,
       head: [[`${weightClass}`, ...ageCategories]],
       body: tableData,
@@ -259,12 +267,20 @@ function generateLandscapePDF(
         },
       },
       margin: { left: 10, right: 10 },
-      tableWidth: isYouthOnly ? 'auto' : undefined,
       tableLineWidth: 0.1,
-      didDrawPage: (data) => {
+      didDrawPage: (data: any) => {
         yPosition = data.cursor!.y + (isYouthOnly ? 2 : 2.5);
       },
-    });
+    };
+
+    // For youth-only classes, set fixed column widths to limit horizontal spread
+    if (isYouthOnly) {
+      tableConfig.columnStyles[1] = { cellWidth: 35 };
+      tableConfig.columnStyles[2] = { cellWidth: 35 };
+      tableConfig.columnStyles[3] = { cellWidth: 35 };
+    }
+
+    autoTable(doc, tableConfig);
   });
 }
 
