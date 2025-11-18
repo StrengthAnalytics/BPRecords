@@ -107,26 +107,28 @@ function generatePortraitPDF(
 ) {
   const weightClasses = gender === 'M' ? WEIGHT_CLASSES_MALE : WEIGHT_CLASSES_FEMALE;
   const validWeightClasses = weightClasses.filter(wc => wc !== 'All');
+  const youthWeightClass = gender === 'M' ? '53kg' : '43kg';
 
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text(`${region} ${gender === 'M' ? 'Men' : 'Women'}'s Records`, 14, 15);
 
-  doc.setFontSize(8);
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 22);
+  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 21);
 
-  let yPosition = 28;
+  let yPosition = 26;
 
   validWeightClasses.forEach((weightClass) => {
     const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
     const records = organizedRecords[weightClass];
+    const isYouthOnly = weightClass === youthWeightClass;
 
     if (!records) return;
 
-    // Check if we need a new page - more aggressive spacing
-    const tableHeight = 35 + (LIFT_ORDER.length * 12);
-    if (yPosition + tableHeight > doc.internal.pageSize.height - 15) {
+    // Calculate table height - youth classes are smaller
+    const tableHeight = isYouthOnly ? 22 : 38;
+    if (yPosition + tableHeight > doc.internal.pageSize.height - 10) {
       doc.addPage();
       yPosition = 15;
     }
@@ -150,15 +152,15 @@ function generatePortraitPDF(
       headStyles: {
         fillColor: [220, 38, 38],
         textColor: 255,
-        fontSize: 7,
+        fontSize: isYouthOnly ? 6 : 6.5,
         fontStyle: 'bold',
         halign: 'center',
         valign: 'middle',
-        cellPadding: 1.5,
+        cellPadding: isYouthOnly ? 1 : 1.2,
       },
       bodyStyles: {
-        fontSize: 5.5,
-        cellPadding: 1,
+        fontSize: isYouthOnly ? 4.5 : 5,
+        cellPadding: isYouthOnly ? 0.6 : 0.8,
         valign: 'middle',
         halign: 'center',
         lineWidth: 0.1,
@@ -166,15 +168,16 @@ function generatePortraitPDF(
       columnStyles: {
         0: {
           fontStyle: 'bold',
-          fontSize: 8,
-          cellWidth: 28,
+          fontSize: isYouthOnly ? 6.5 : 7,
+          cellWidth: isYouthOnly ? 22 : 24,
           halign: 'center',
         },
       },
       margin: { left: 10, right: 10 },
+      tableWidth: isYouthOnly ? 'auto' : undefined,
       tableLineWidth: 0.1,
       didDrawPage: (data) => {
-        yPosition = data.cursor!.y + 3;
+        yPosition = data.cursor!.y + (isYouthOnly ? 2 : 2.5);
       },
     });
   });
@@ -189,26 +192,28 @@ function generateLandscapePDF(
 ) {
   const weightClasses = gender === 'M' ? WEIGHT_CLASSES_MALE : WEIGHT_CLASSES_FEMALE;
   const validWeightClasses = weightClasses.filter(wc => wc !== 'All');
+  const youthWeightClass = gender === 'M' ? '53kg' : '43kg';
 
-  doc.setFontSize(18);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text(`${region} ${gender === 'M' ? 'Men' : 'Women'}'s Records`, 14, 15);
 
-  doc.setFontSize(8);
+  doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 22);
+  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 21);
 
-  let yPosition = 28;
+  let yPosition = 26;
 
   validWeightClasses.forEach((weightClass) => {
     const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
     const records = organizedRecords[weightClass];
+    const isYouthOnly = weightClass === youthWeightClass;
 
     if (!records) return;
 
-    // Check if we need a new page - more aggressive spacing
-    const tableHeight = 30 + (LIFT_ORDER.length * 10);
-    if (yPosition + tableHeight > doc.internal.pageSize.height - 15) {
+    // Calculate table height - youth classes are smaller
+    const tableHeight = isYouthOnly ? 18 : 32;
+    if (yPosition + tableHeight > doc.internal.pageSize.height - 10) {
       doc.addPage();
       yPosition = 15;
     }
@@ -232,15 +237,15 @@ function generateLandscapePDF(
       headStyles: {
         fillColor: [220, 38, 38],
         textColor: 255,
-        fontSize: 8,
+        fontSize: isYouthOnly ? 6.5 : 7,
         fontStyle: 'bold',
         halign: 'center',
         valign: 'middle',
-        cellPadding: 1.5,
+        cellPadding: isYouthOnly ? 1 : 1.2,
       },
       bodyStyles: {
-        fontSize: 6,
-        cellPadding: 1.2,
+        fontSize: isYouthOnly ? 5 : 5.5,
+        cellPadding: isYouthOnly ? 0.8 : 1,
         valign: 'middle',
         halign: 'center',
         lineWidth: 0.1,
@@ -248,15 +253,16 @@ function generateLandscapePDF(
       columnStyles: {
         0: {
           fontStyle: 'bold',
-          fontSize: 9,
-          cellWidth: 30,
+          fontSize: isYouthOnly ? 7.5 : 8,
+          cellWidth: isYouthOnly ? 24 : 26,
           halign: 'center',
         },
       },
       margin: { left: 10, right: 10 },
+      tableWidth: isYouthOnly ? 'auto' : undefined,
       tableLineWidth: 0.1,
       didDrawPage: (data) => {
-        yPosition = data.cursor!.y + 3;
+        yPosition = data.cursor!.y + (isYouthOnly ? 2 : 2.5);
       },
     });
   });

@@ -149,15 +149,22 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </div>
 
-      <div className="flex gap-4 pt-6 border-t-2 border-gray-100 dark:border-slate-700">
-        {hasActiveFilters && (
-          <IconButton onClick={onClear} variant="secondary">
-            Clear All Filters
-          </IconButton>
-        )}
-        <IconButton onClick={onPDFExport} variant="primary">
-          📄 Export PDF
-        </IconButton>
+      <div className="pt-6 border-t-2 border-gray-100 dark:border-slate-700">
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-4">
+            {hasActiveFilters && (
+              <IconButton onClick={onClear} variant="secondary">
+                Clear All Filters
+              </IconButton>
+            )}
+            <IconButton onClick={onPDFExport} variant="primary">
+              📄 Export PDF
+            </IconButton>
+          </div>
+          <p className="text-sm text-gray-600 dark:text-slate-400 italic">
+            Generate formatted competition record sheets for display at events
+          </p>
+        </div>
       </div>
     </Section>
   );
