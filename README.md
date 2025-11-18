@@ -1,15 +1,17 @@
 # British Powerlifting Records Hub
 
-A modern, responsive web application for searching and exploring powerlifting records across the UK. Built with React, TypeScript, and Tailwind CSS.
+A modern, installable Progressive Web App (PWA) for searching and exploring powerlifting records across the UK. Built with React, TypeScript, and Tailwind CSS.
 
 ## Features
 
+- **Progressive Web App**: Install on mobile or desktop for offline access and app-like experience
 - **Advanced Filtering**: Search records by name, region, weight class, lift type, age category, equipment, and gender
 - **Multiple Sort Options**: Sort records by weight, date, or name
 - **PDF Export**: Generate professional competition-ready PDFs with customizable region, gender, and orientation
 - **CSV to JSON Converter**: Standalone tool for converting Google Sheets exports to JSON with validation and date format handling
 - **JSON Import**: Import powerlifting records from JSON files
 - **Dark Mode**: Full dark mode support with toggle
+- **Offline Support**: Service worker caches app resources for offline functionality
 - **Responsive Design**: Mobile-first design that works on all screen sizes
 - **Local Storage**: Records persist in browser localStorage
 - **Clean UI**: Modern, athletic interface with skeleton loading states
@@ -18,9 +20,11 @@ A modern, responsive web application for searching and exploring powerlifting re
 
 - **React 19.2+** with TypeScript
 - **Tailwind CSS** for styling
-- **Vite** for build tooling
+- **Vite** for build tooling with **vite-plugin-pwa** for PWA support
+- **Service Worker** for offline caching and app updates
 - **jsPDF** with jspdf-autotable for PDF generation
 - **LocalStorage** for data persistence
+- **Web Manifest** with custom powerlifting-themed icon
 
 ## Getting Started
 
@@ -49,6 +53,49 @@ npm run build
 ```bash
 npm run preview
 ```
+
+## Progressive Web App (PWA)
+
+This application is a fully-featured Progressive Web App that can be installed on your device:
+
+### PWA Features
+- **Installable**: Add to home screen on mobile devices or install as a desktop app
+- **Offline Support**: Service worker caches app resources for offline access
+- **App-like Experience**: Runs in standalone mode without browser UI
+- **Auto-updates**: Automatically checks for and prompts to install updates
+- **Custom Icon**: Powerlifting-themed icon with British colors (red, white, blue)
+
+### Installation Instructions
+
+**On Mobile (Android/iOS):**
+1. Open the app in your browser
+2. Look for "Add to Home Screen" or "Install App" prompt
+3. Follow the prompts to install
+
+**On Desktop (Chrome/Edge):**
+1. Look for the install icon in the address bar
+2. Click "Install" to add as a desktop app
+
+### Generating PWA Icons
+
+The app includes an SVG icon at `/public/icon.svg`. To generate PNG icons at various sizes:
+
+1. Run the development server: `npm run dev`
+2. Open `http://localhost:5173/generate-icons.html`
+3. Click "Generate All Icons"
+4. Download each icon size and save to the `/public` folder with these names:
+   - `icon-72x72.png`
+   - `icon-96x96.png`
+   - `icon-128x128.png`
+   - `icon-144x144.png`
+   - `icon-152x152.png`
+   - `icon-192x192.png`
+   - `icon-384x384.png`
+   - `icon-512x512.png`
+   - `icon-maskable-192x192.png` (same as icon-192x192.png)
+   - `icon-maskable-512x512.png` (same as icon-512x512.png)
+
+Alternatively, use any SVG to PNG converter tool with the `/public/icon.svg` file.
 
 ## Usage
 
@@ -155,12 +202,17 @@ A sample data file is provided at `sample-records.json` with 10 example records 
 ```
 BPRecords/
 ├── csv-to-json-converter.html   # Standalone CSV converter tool
+├── generate-icons.html          # PWA icon generator utility
 ├── data-source/                  # Source JSON files organized by region
 │   ├── README.md                # Data source documentation
 │   ├── british.json
 │   ├── england.json
 │   ├── scotland.json
 │   └── wales.json
+├── public/                      # Static assets
+│   ├── icon.svg                 # Custom powerlifting-themed PWA icon
+│   ├── manifest.json            # PWA manifest file
+│   └── sw.js                    # Service worker for offline support
 ├── scripts/
 │   └── build-records.cjs        # Converts JSON files to TypeScript
 ├── src/
@@ -188,9 +240,10 @@ BPRecords/
 │   ├── data/
 │   │   └── records.ts              # Auto-generated from data-source/
 │   ├── App.tsx                  # Root component with dark mode
-│   └── main.tsx                 # Application entry point
+│   └── main.tsx                 # Application entry point with SW registration
 ├── DATA-MANAGEMENT.md           # Comprehensive data management guide
 ├── README.md                    # This file
+├── vite.config.ts               # Vite config with PWA plugin
 └── package.json
 ```
 
@@ -222,6 +275,8 @@ Works in all modern browsers that support:
 - CSS Grid
 - LocalStorage API
 - Fetch API
+- Service Workers (for PWA functionality)
+- Web App Manifest (for PWA installation)
 
 ## License
 
