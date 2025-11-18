@@ -106,6 +106,44 @@
             border: 2px solid #ccf;
         }
 
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffc107;
+        }
+
+        .warnings-section {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .warnings-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .warning-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .warning-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+            color: #856404;
+        }
+
+        .warning-item:last-child {
+            border-bottom: none;
+        }
+
         .results {
             margin-top: 30px;
         }
@@ -270,6 +308,12 @@
         </div>
 
         <div id="status"></div>
+
+        <div id="warnings" class="warnings-section hidden">
+            <h3>⚠️ Validation Warnings (<span id="warningCount">0</span>)</h3>
+            <p style="margin-bottom: 10px; font-size: 14px;">Please review these issues before using the JSON files:</p>
+            <div class="warning-list" id="warningList"></div>
+        </div>
 
         <div id="results" class="results hidden">
             <h2 style="margin-bottom: 20px; color: #333;">Conversion Results</h2>
@@ -437,6 +481,12 @@
         }
 
         function parseDate(dateStr) {
+            if (!dateStr || dateStr.trim() === '') {
+                return '';
+            }
+
+            dateStr = dateStr.trim();
+
             // Handle DD/MM/YYYY format (e.g., "29/04/2023")
             if (dateStr.includes('/')) {
                 const parts = dateStr.split('/');
@@ -448,6 +498,30 @@
                 }
             }
 
+            // Handle YY-MM-DD format (e.g., "25-10-25")
+            if (/^\d{2}-\d{2}-\d{2}$/.test(dateStr)) {
+                const [year, month, day] = dateStr.split('-');
+                const fullYear = parseInt(year) >= 50 ? `19${year}` : `20${year}`;
+                return `${fullYear}-${month}-${day}`;
+            }
+
+            // Handle YYYY-MM-D format (single digit day)
+            if (/^\d{4}-\d{2}-\d{1}$/.test(dateStr)) {
+                const [year, month, day] = dateStr.split('-');
+                return `${year}-${month}-${day.padStart(2, '0')}`;
+            }
+
+            // Handle YYYY-M-DD format (single digit month)
+            if (/^\d{4}-\d{1}-\d{2}$/.test(dateStr)) {
+                const [year, month, day] = dateStr.split('-');
+                return `${year}-${month.padStart(2, '0')}-${day}`;
+            }
+
+            // If already in YYYY-MM-DD format, validate and return
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                return dateStr;
+            }
+
             // Try to parse other date formats
             const date = new Date(dateStr);
             if (!isNaN(date.getTime())) {
@@ -456,16 +530,60 @@
                 const day = String(date.getDate()).padStart(2, '0');
                 return `${year}-${month}-${day}`;
             }
+
             return dateStr;
+        }
+
+        function validateDate(dateStr, rowNum) {
+            const warnings = [];
+
+            if (!dateStr || dateStr.trim() === '') {
+                warnings.push(`Row ${rowNum}: Empty date`);
+                return warnings;
+            }
+
+            // Check if date is in correct format
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                warnings.push(`Row ${rowNum}: Date '${dateStr}' not in YYYY-MM-DD format`);
+            }
+
+            // Parse and validate the date
+            const [year, month, day] = dateStr.split('-').map(Number);
+
+            // Warn about suspicious years
+            const currentYear = new Date().getFullYear();
+            if (year > currentYear + 1) {
+                warnings.push(`Row ${rowNum}: Date '${dateStr}' has future year ${year} - please verify`);
+            }
+            if (year < 1900) {
+                warnings.push(`Row ${rowNum}: Date '${dateStr}' has unlikely year ${year} - please verify`);
+            }
+
+            // Validate month
+            if (month < 1 || month > 12) {
+                warnings.push(`Row ${rowNum}: Date '${dateStr}' has invalid month ${month}`);
+            }
+
+            // Validate day
+            if (day < 1 || day > 31) {
+                warnings.push(`Row ${rowNum}: Date '${dateStr}' has invalid day ${day}`);
+            }
+
+            return warnings;
         }
 
         function convertToJSON(csvData) {
             const { headers, records } = csvData;
             const converted = [];
-            const errors = [];
+            const warnings = [];
 
             records.forEach((record, index) => {
+                const rowNum = index + 2; // +2 because of header row and 0-based index
+
                 try {
+                    const rawDate = record['Date Set'] || record['dateSet'] || '';
+                    const parsedDate = parseDate(rawDate);
+
                     const jsonRecord = {
                         region: record['Region'] || record['region'] || '',
                         name: record['Name'] || record['name'] || '',
@@ -474,23 +592,46 @@
                         lift: normalizeLift(record['Lift'] || record['lift'] || ''),
                         ageCategory: record['Age Category'] || record['ageCategory'] || '',
                         record: parseFloat(record['Record'] || record['record'] || '0'),
-                        dateSet: parseDate(record['Date Set'] || record['dateSet'] || ''),
+                        dateSet: parsedDate,
                         equipment: normalizeEquipment(record['Equipment'] || record['equipment'] || '')
                     };
 
-                    // Validation
-                    if (!jsonRecord.region) errors.push(`Row ${index + 2}: Missing region`);
-                    if (!jsonRecord.name) errors.push(`Row ${index + 2}: Missing name`);
-                    if (!['M', 'F'].includes(jsonRecord.gender)) errors.push(`Row ${index + 2}: Invalid gender (must be M or F)`);
-                    if (isNaN(jsonRecord.record)) errors.push(`Row ${index + 2}: Invalid record value`);
+                    // Basic validation
+                    if (!jsonRecord.region) {
+                        warnings.push(`Row ${rowNum}: Missing region`);
+                    }
+                    if (!jsonRecord.name) {
+                        warnings.push(`Row ${rowNum}: Missing name`);
+                    }
+                    if (!['M', 'F'].includes(jsonRecord.gender)) {
+                        warnings.push(`Row ${rowNum}: Invalid gender '${jsonRecord.gender}' (must be M or F)`);
+                    }
+                    if (isNaN(jsonRecord.record) || jsonRecord.record <= 0) {
+                        warnings.push(`Row ${rowNum}: Invalid record value '${record['Record'] || record['record']}'`);
+                    }
+                    if (!jsonRecord.weightClass) {
+                        warnings.push(`Row ${rowNum}: Missing weight class`);
+                    }
+                    if (!jsonRecord.ageCategory) {
+                        warnings.push(`Row ${rowNum}: Missing age category`);
+                    }
+
+                    // Date validation
+                    const dateWarnings = validateDate(parsedDate, rowNum);
+                    warnings.push(...dateWarnings);
+
+                    // Warn if date was converted from different format
+                    if (rawDate !== parsedDate && rawDate.trim() !== '') {
+                        warnings.push(`Row ${rowNum}: Date converted from '${rawDate}' to '${parsedDate}'`);
+                    }
 
                     converted.push(jsonRecord);
                 } catch (error) {
-                    errors.push(`Row ${index + 2}: ${error.message}`);
+                    warnings.push(`Row ${rowNum}: ${error.message}`);
                 }
             });
 
-            return { converted, errors };
+            return { converted, warnings };
         }
 
         function groupByRegion(records) {
@@ -513,13 +654,14 @@
                 try {
                     const text = e.target.result;
                     const csvData = parseCSV(text);
-                    const { converted, errors } = convertToJSON(csvData);
+                    const { converted, warnings } = convertToJSON(csvData);
 
-                    if (errors.length > 0) {
-                        showStatus(`Conversion completed with ${errors.length} warnings. Check console for details.`, 'error');
-                        console.warn('Conversion warnings:', errors);
+                    if (warnings.length > 0) {
+                        showStatus(`Conversion completed with ${warnings.length} warnings. Please review below.`, 'warning');
+                        displayWarnings(warnings);
                     } else {
-                        showStatus(`Successfully converted ${converted.length} records!`, 'success');
+                        showStatus(`Successfully converted ${converted.length} records with no warnings!`, 'success');
+                        hideWarnings();
                     }
 
                     convertedData = groupByRegion(converted);
@@ -531,6 +673,24 @@
                 }
             };
             reader.readAsText(file);
+        }
+
+        function displayWarnings(warnings) {
+            const warningsDiv = document.getElementById('warnings');
+            const warningList = document.getElementById('warningList');
+            const warningCount = document.getElementById('warningCount');
+
+            warningCount.textContent = warnings.length;
+            warningList.innerHTML = warnings.map(warning =>
+                `<div class="warning-item">${warning}</div>`
+            ).join('');
+
+            warningsDiv.classList.remove('hidden');
+        }
+
+        function hideWarnings() {
+            const warningsDiv = document.getElementById('warnings');
+            warningsDiv.classList.add('hidden');
         }
 
         function displayResults(allRecords, regionData) {

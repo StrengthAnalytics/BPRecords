@@ -9,13 +9,15 @@ interface FilterPanelProps {
   onFilterChange: (key: keyof FilterState, value: string) => void;
   onClear: () => void;
   hasActiveFilters: boolean;
+  onPDFExport: () => void;
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
   filters,
   onFilterChange,
   onClear,
-  hasActiveFilters
+  hasActiveFilters,
+  onPDFExport
 }) => {
   const inputClass = "w-full px-4 py-4 text-base border-2 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-4 focus:ring-red-500/20 focus:border-red-500 dark:focus:ring-red-600/20 dark:focus:border-red-600 transition-all shadow-sm hover:border-red-400 dark:hover:border-red-500";
   const labelClass = "block text-base font-semibold text-gray-800 dark:text-slate-200 mb-3";
@@ -147,13 +149,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </div>
 
-      {hasActiveFilters && (
-        <div className="flex gap-4 pt-6 border-t-2 border-gray-100 dark:border-slate-700">
+      <div className="flex gap-4 pt-6 border-t-2 border-gray-100 dark:border-slate-700">
+        {hasActiveFilters && (
           <IconButton onClick={onClear} variant="secondary">
             Clear All Filters
           </IconButton>
-        </div>
-      )}
+        )}
+        <IconButton onClick={onPDFExport} variant="primary">
+          📄 Export PDF
+        </IconButton>
+      </div>
     </Section>
   );
 };

@@ -17,6 +17,16 @@ export const useRecordsFilter = (records: PowerliftingRecord[]) => {
   const [sortBy, setSortBy] = useState<'weight' | 'date' | 'name'>('weight');
 
   const filteredRecords = useMemo(() => {
+    // If no filters are active, return empty array instead of all records
+    const hasAnyFilter = Object.entries(filters).some(([key, value]) => {
+      if (key === 'name') return value !== '';
+      return value !== 'All';
+    });
+
+    if (!hasAnyFilter) {
+      return [];
+    }
+
     const filtered = filterRecords(records, filters);
     return sortRecords(filtered, sortBy);
   }, [records, filters, sortBy]);

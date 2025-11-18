@@ -10,7 +10,7 @@ import type { PowerliftingRecord } from '../types/records';
  * 1. Edit JSON files in data-source/
  * 2. Run: npm run build:data
  *
- * Last generated: 2025-11-18T14:04:50.105Z
+ * Last generated: 2025-11-18T15:20:22.078Z
  */
 
 export const records: PowerliftingRecord[] = [
@@ -20240,7 +20240,7 @@ export const records: PowerliftingRecord[] = [
       lift: "squat",
       ageCategory: "U18",
       record: 180,
-      dateSet: "24-10-26",
+      dateSet: "2024-10-26",
       equipment: "unequipped"
     },
     {
@@ -20273,7 +20273,7 @@ export const records: PowerliftingRecord[] = [
       lift: "squat",
       ageCategory: "M1",
       record: 157.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20295,7 +20295,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press",
       ageCategory: "U18",
       record: 122.5,
-      dateSet: "24-10-26",
+      dateSet: "2024-10-26",
       equipment: "unequipped"
     },
     {
@@ -20328,7 +20328,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press",
       ageCategory: "M1",
       record: 97.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20460,7 +20460,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press_ac",
       ageCategory: "U18",
       record: 122.5,
-      dateSet: "24-10-26",
+      dateSet: "2024-10-26",
       equipment: "unequipped"
     },
     {
@@ -20493,7 +20493,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press_ac",
       ageCategory: "M1",
       record: 97.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20515,7 +20515,7 @@ export const records: PowerliftingRecord[] = [
       lift: "squat",
       ageCategory: "U18",
       record: 210,
-      dateSet: "35-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20526,7 +20526,7 @@ export const records: PowerliftingRecord[] = [
       lift: "squat",
       ageCategory: "U23",
       record: 227.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20603,7 +20603,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press",
       ageCategory: "U23",
       record: 152.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20669,7 +20669,7 @@ export const records: PowerliftingRecord[] = [
       lift: "deadlift",
       ageCategory: "U18",
       record: 237.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20746,7 +20746,7 @@ export const records: PowerliftingRecord[] = [
       lift: "total",
       ageCategory: "U18",
       record: 545,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20757,7 +20757,7 @@ export const records: PowerliftingRecord[] = [
       lift: "total",
       ageCategory: "U23",
       record: 622.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -20834,7 +20834,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press_ac",
       ageCategory: "U23",
       record: 152.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -21076,7 +21076,7 @@ export const records: PowerliftingRecord[] = [
       lift: "deadlift",
       ageCategory: "Open",
       record: 290,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -21098,7 +21098,7 @@ export const records: PowerliftingRecord[] = [
       lift: "deadlift",
       ageCategory: "M2",
       record: 235,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -21109,7 +21109,7 @@ export const records: PowerliftingRecord[] = [
       lift: "deadlift",
       ageCategory: "M3",
       record: 235,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -21450,7 +21450,7 @@ export const records: PowerliftingRecord[] = [
       lift: "deadlift",
       ageCategory: "U16",
       record: 225,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -21824,7 +21824,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press",
       ageCategory: "M1",
       record: 170,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -22022,7 +22022,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press_ac",
       ageCategory: "M1",
       record: 170,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -22462,7 +22462,7 @@ export const records: PowerliftingRecord[] = [
       lift: "squat",
       ageCategory: "Open",
       record: 335,
-      dateSet: "25-11-01",
+      dateSet: "2025-11-01",
       equipment: "unequipped"
     },
     {
@@ -22671,7 +22671,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press_ac",
       ageCategory: "U23",
       record: 177.5,
-      dateSet: "24-07-13",
+      dateSet: "2024-07-13",
       equipment: "unequipped"
     },
     {
@@ -22715,7 +22715,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press_ac",
       ageCategory: "M3",
       record: 142.5,
-      dateSet: "25-10-25",
+      dateSet: "2025-10-25",
       equipment: "unequipped"
     },
     {
@@ -22748,7 +22748,7 @@ export const records: PowerliftingRecord[] = [
       lift: "squat",
       ageCategory: "M1",
       record: 105,
-      dateSet: "25-10-12",
+      dateSet: "2025-10-12",
       equipment: "unequipped"
     },
     {
@@ -22759,7 +22759,7 @@ export const records: PowerliftingRecord[] = [
       lift: "squat",
       ageCategory: "M2",
       record: 105,
-      dateSet: "25-10-12",
+      dateSet: "2025-10-12",
       equipment: "unequipped"
     },
     {
@@ -22792,7 +22792,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press",
       ageCategory: "M1",
       record: 62.5,
-      dateSet: "25-10-12",
+      dateSet: "2025-10-12",
       equipment: "unequipped"
     },
     {
@@ -22803,7 +22803,7 @@ export const records: PowerliftingRecord[] = [
       lift: "bench_press",
       ageCategory: "M2",
       record: 62.5,
-      dateSet: "25-10-12",
+      dateSet: "2025-10-12",
       equipment: "unequipped"
     },
     {
@@ -23441,7 +23441,7 @@ export const records: PowerliftingRecord[] = [
       lift: "total",
       ageCategory: "U18",
       record: 332.5,
-      dateSet: "2024-10-6",
+      dateSet: "2024-10-06",
       equipment: "unequipped"
     },
     {
