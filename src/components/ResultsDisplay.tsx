@@ -86,7 +86,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
             Ready to find records?
           </h3>
           <p className="text-xl text-gray-500 dark:text-slate-400 max-w-md mx-auto">
-            Select your criteria above and click search to view results
+            Select your criteria above to view results
           </p>
         </div>
       ) : (
