@@ -108,15 +108,15 @@ function generatePortraitPDF(
   const weightClasses = gender === 'M' ? WEIGHT_CLASSES_MALE : WEIGHT_CLASSES_FEMALE;
   const validWeightClasses = weightClasses.filter(wc => wc !== 'All');
 
-  doc.setFontSize(20);
+  doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.text(`${region} ${gender === 'M' ? 'Men' : 'Women'}'s Records`, 14, 20);
+  doc.text(`${region} ${gender === 'M' ? 'Men' : 'Women'}'s Records`, 14, 15);
 
-  doc.setFontSize(10);
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 28);
+  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 22);
 
-  let yPosition = 35;
+  let yPosition = 28;
 
   validWeightClasses.forEach((weightClass) => {
     const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
@@ -124,18 +124,12 @@ function generatePortraitPDF(
 
     if (!records) return;
 
-    // Check if we need a new page
-    const tableHeight = 50 + (LIFT_ORDER.length * 20);
-    if (yPosition + tableHeight > doc.internal.pageSize.height - 20) {
+    // Check if we need a new page - more aggressive spacing
+    const tableHeight = 35 + (LIFT_ORDER.length * 12);
+    if (yPosition + tableHeight > doc.internal.pageSize.height - 15) {
       doc.addPage();
-      yPosition = 20;
+      yPosition = 15;
     }
-
-    // Weight class header
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${weightClass}`, 14, yPosition);
-    yPosition += 8;
 
     // Create table data
     const tableData = LIFT_ORDER.map(lift => {
@@ -147,29 +141,40 @@ function generatePortraitPDF(
       return row;
     });
 
+    // Include weight class in the header row
     autoTable(doc, {
       startY: yPosition,
-      head: [['Lift', ...ageCategories]],
+      head: [[`${weightClass}`, ...ageCategories]],
       body: tableData,
       theme: 'grid',
       headStyles: {
         fillColor: [220, 38, 38],
         textColor: 255,
-        fontSize: 8,
+        fontSize: 7,
         fontStyle: 'bold',
         halign: 'center',
+        valign: 'middle',
+        cellPadding: 1.5,
       },
       bodyStyles: {
-        fontSize: 7,
-        cellPadding: 2,
+        fontSize: 5.5,
+        cellPadding: 1,
         valign: 'middle',
+        halign: 'center',
+        lineWidth: 0.1,
       },
       columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 35 },
+        0: {
+          fontStyle: 'bold',
+          fontSize: 8,
+          cellWidth: 28,
+          halign: 'center',
+        },
       },
-      margin: { left: 14, right: 14 },
+      margin: { left: 10, right: 10 },
+      tableLineWidth: 0.1,
       didDrawPage: (data) => {
-        yPosition = data.cursor!.y + 10;
+        yPosition = data.cursor!.y + 3;
       },
     });
   });
@@ -185,15 +190,15 @@ function generateLandscapePDF(
   const weightClasses = gender === 'M' ? WEIGHT_CLASSES_MALE : WEIGHT_CLASSES_FEMALE;
   const validWeightClasses = weightClasses.filter(wc => wc !== 'All');
 
-  doc.setFontSize(20);
+  doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  doc.text(`${region} ${gender === 'M' ? 'Men' : 'Women'}'s Records`, 14, 20);
+  doc.text(`${region} ${gender === 'M' ? 'Men' : 'Women'}'s Records`, 14, 15);
 
-  doc.setFontSize(10);
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 28);
+  doc.text(`Generated: ${new Date().toLocaleDateString()}`, 14, 22);
 
-  let yPosition = 35;
+  let yPosition = 28;
 
   validWeightClasses.forEach((weightClass) => {
     const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
@@ -201,18 +206,12 @@ function generateLandscapePDF(
 
     if (!records) return;
 
-    // Check if we need a new page
-    const tableHeight = 50 + (LIFT_ORDER.length * 15);
-    if (yPosition + tableHeight > doc.internal.pageSize.height - 20) {
+    // Check if we need a new page - more aggressive spacing
+    const tableHeight = 30 + (LIFT_ORDER.length * 10);
+    if (yPosition + tableHeight > doc.internal.pageSize.height - 15) {
       doc.addPage();
-      yPosition = 20;
+      yPosition = 15;
     }
-
-    // Weight class header
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`${weightClass}`, 14, yPosition);
-    yPosition += 8;
 
     // Create table data
     const tableData = LIFT_ORDER.map(lift => {
@@ -224,29 +223,40 @@ function generateLandscapePDF(
       return row;
     });
 
+    // Include weight class in the header row
     autoTable(doc, {
       startY: yPosition,
-      head: [['Lift', ...ageCategories]],
+      head: [[`${weightClass}`, ...ageCategories]],
       body: tableData,
       theme: 'grid',
       headStyles: {
         fillColor: [220, 38, 38],
         textColor: 255,
-        fontSize: 9,
+        fontSize: 8,
         fontStyle: 'bold',
         halign: 'center',
+        valign: 'middle',
+        cellPadding: 1.5,
       },
       bodyStyles: {
-        fontSize: 8,
-        cellPadding: 3,
+        fontSize: 6,
+        cellPadding: 1.2,
         valign: 'middle',
+        halign: 'center',
+        lineWidth: 0.1,
       },
       columnStyles: {
-        0: { fontStyle: 'bold', cellWidth: 30 },
+        0: {
+          fontStyle: 'bold',
+          fontSize: 9,
+          cellWidth: 30,
+          halign: 'center',
+        },
       },
-      margin: { left: 14, right: 14 },
+      margin: { left: 10, right: 10 },
+      tableLineWidth: 0.1,
       didDrawPage: (data) => {
-        yPosition = data.cursor!.y + 10;
+        yPosition = data.cursor!.y + 3;
       },
     });
   });
