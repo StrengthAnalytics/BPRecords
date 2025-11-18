@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#1e293b"/>
+
+  <!-- Barbell design -->
+  <!-- Left weight plates -->
+  <rect x="60" y="200" width="80" height="112" rx="8" fill="#dc2626"/>
+  <rect x="80" y="190" width="60" height="132" rx="6" fill="#ef4444"/>
+  <rect x="100" y="180" width="40" height="152" rx="4" fill="#dc2626"/>
+
+  <!-- Right weight plates -->
+  <rect x="372" y="200" width="80" height="112" rx="8" fill="#2563eb"/>
+  <rect x="372" y="190" width="60" height="132" rx="6" fill="#3b82f6"/>
+  <rect x="372" y="180" width="40" height="152" rx="4" fill="#2563eb"/>
+
+  <!-- Barbell bar -->
+  <rect x="130" y="240" width="252" height="32" rx="4" fill="#94a3b8"/>
+  <rect x="130" y="244" width="252" height="24" rx="3" fill="#cbd5e1"/>
+
+  <!-- Center knurling detail -->
+  <rect x="240" y="240" width="32" height="32" fill="#64748b" opacity="0.5"/>
+
+  <!-- Collar clips -->
+  <rect x="140" y="236" width="12" height="40" rx="2" fill="#475569"/>
+  <rect x="360" y="236" width="12" height="40" rx="2" fill="#475569"/>
+
+  <!-- Union Jack accent - subtle cross pattern in center -->
+  <g opacity="0.2">
+    <line x1="256" y1="200" x2="256" y2="312" stroke="#ffffff" stroke-width="3"/>
+    <line x1="200" y1="256" x2="312" y2="256" stroke="#ffffff" stroke-width="3"/>
+  </g>
+
+  <!-- Highlight effects on plates for depth -->
+  <ellipse cx="120" cy="210" rx="15" ry="20" fill="#ffffff" opacity="0.2"/>
+  <ellipse cx="392" cy="210" rx="15" ry="20" fill="#ffffff" opacity="0.2"/>
+</svg>

@@ -215,6 +215,49 @@ See also: [data-source/README.md](./data-source/README.md) for detailed update i
 
 Toggle between light and dark modes using the button in the top-right corner. Your preference is saved to localStorage.
 
+## Progressive Web App (PWA)
+
+This application is a fully-featured Progressive Web App that can be installed on your device:
+
+### Features
+- **Installable**: Add to home screen on mobile devices or install as a desktop app
+- **Offline Support**: Service worker caches app resources for offline access
+- **App-like Experience**: Runs in standalone mode without browser UI
+- **Auto-updates**: Automatically checks for and prompts to install updates
+- **Custom Icon**: Powerlifting-themed icon with British colors (red, white, blue)
+
+### Installation
+
+**On Mobile (Android/iOS):**
+1. Open the app in your browser
+2. Look for "Add to Home Screen" or "Install App" prompt
+3. Follow the prompts to install
+
+**On Desktop (Chrome/Edge):**
+1. Look for the install icon in the address bar
+2. Click "Install" to add as a desktop app
+
+### Generating PWA Icons
+
+The app includes an SVG icon at `/public/icon.svg`. To generate PNG icons at various sizes:
+
+1. Run the development server: `npm run dev`
+2. Open `http://localhost:5173/generate-icons.html`
+3. Click "Generate All Icons"
+4. Download each icon size and save to the `/public` folder with these names:
+   - `icon-72x72.png`
+   - `icon-96x96.png`
+   - `icon-128x128.png`
+   - `icon-144x144.png`
+   - `icon-152x152.png`
+   - `icon-192x192.png`
+   - `icon-384x384.png`
+   - `icon-512x512.png`
+   - `icon-maskable-192x192.png` (same as icon-192x192.png)
+   - `icon-maskable-512x512.png` (same as icon-512x512.png)
+
+Alternatively, use any SVG to PNG converter tool with the `/public/icon.svg` file.
+
 ## Browser Support
 
 Works in all modern browsers that support:
