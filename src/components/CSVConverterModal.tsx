@@ -80,7 +80,24 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
     return eqMap[equipment.toLowerCase()] || 'unequipped';
   };
 
+  const normalizeWeightClass = (weightClass: string): string => {
+    // Remove minus sign prefix (e.g., "-53kg" -> "53kg")
+    return weightClass.replace(/^-/, '');
+  };
+
   const parseDate = (dateStr: string): string => {
+    // Handle DD/MM/YYYY format (e.g., "29/04/2023")
+    if (dateStr.includes('/')) {
+      const parts = dateStr.split('/');
+      if (parts.length === 3) {
+        const day = parts[0].padStart(2, '0');
+        const month = parts[1].padStart(2, '0');
+        const year = parts[2];
+        return `${year}-${month}-${day}`;
+      }
+    }
+
+    // Try to parse other date formats
     const date = new Date(dateStr);
     if (!isNaN(date.getTime())) {
       const year = date.getFullYear();
@@ -95,7 +112,7 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
     return records.map(record => ({
       region: record['Region'] || record['region'] || '',
       name: record['Name'] || record['name'] || '',
-      weightClass: record['Weight Class'] || record['weightClass'] || '',
+      weightClass: normalizeWeightClass(record['Weight Class'] || record['weightClass'] || ''),
       gender: (record['Gender'] || record['gender'] || '').toUpperCase() as 'M' | 'F',
       lift: normalizeLift(record['Lift'] || record['lift'] || '') as any,
       ageCategory: record['Age Category'] || record['ageCategory'] || '',
