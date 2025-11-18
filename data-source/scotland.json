@@ -1,0 +1,13 @@
+[
+  {
+    "region": "Scotland",
+    "name": "Emma Wilson",
+    "weightClass": "66kg",
+    "gender": "F",
+    "lift": "deadlift",
+    "ageCategory": "Open",
+    "record": 195.0,
+    "dateSet": "2023-11-20",
+    "equipment": "equipped"
+  }
+]

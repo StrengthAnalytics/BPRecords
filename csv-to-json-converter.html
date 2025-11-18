@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BP Records CSV to JSON Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .upload-section {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            background: #f8f9ff;
+            transition: all 0.3s ease;
+        }
+
+        .upload-section:hover {
+            border-color: #764ba2;
+            background: #f0f1ff;
+        }
+
+        .upload-section.dragover {
+            border-color: #764ba2;
+            background: #e8e9ff;
+            transform: scale(1.02);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .status.error {
+            background: #fee;
+            color: #c33;
+            border: 2px solid #fcc;
+        }
+
+        .status.success {
+            background: #efe;
+            color: #363;
+            border: 2px solid #cfc;
+        }
+
+        .status.info {
+            background: #eef;
+            color: #336;
+            border: 2px solid #ccf;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .regions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .region-card {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .region-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .region-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .region-count {
+            color: #667eea;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .download-btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #764ba2;
+        }
+
+        .download-all {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .download-all:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .column-mapping {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .column-mapping h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .mapping-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .mapping-item:last-child {
+            border-bottom: none;
+        }
+
+        .csv-column {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .json-field {
+            color: #764ba2;
+            font-family: monospace;
+        }
+
+        pre {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>British Powerlifting Records - CSV to JSON Converter</h1>
+        <p class="subtitle">Convert your Google Sheets export to the correct JSON format, split by region</p>
+
+        <div class="upload-section" id="uploadSection">
+            <p style="font-size: 18px; color: #667eea; margin-bottom: 20px;">
+                Drop your CSV file here or click to browse
+            </p>
+            <input type="file" id="fileInput" accept=".csv">
+            <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                Choose CSV File
+            </button>
+        </div>
+
+        <div id="status"></div>
+
+        <div id="results" class="results hidden">
+            <h2 style="margin-bottom: 20px; color: #333;">Conversion Results</h2>
+
+            <div class="stats" id="stats"></div>
+
+            <div class="column-mapping">
+                <h3>Column Mapping</h3>
+                <div class="mapping-item">
+                    <span class="csv-column">Region</span>
+                    <span class="json-field">region</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Name</span>
+                    <span class="json-field">name</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Weight Class</span>
+                    <span class="json-field">weightClass</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Gender</span>
+                    <span class="json-field">gender (M/F)</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Lift</span>
+                    <span class="json-field">lift (squat/bench_press/bench_press_ac/deadlift/total)</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Age Category</span>
+                    <span class="json-field">ageCategory</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Record</span>
+                    <span class="json-field">record (number)</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Date Set</span>
+                    <span class="json-field">dateSet (YYYY-MM-DD)</span>
+                </div>
+                <div class="mapping-item">
+                    <span class="csv-column">Equipment</span>
+                    <span class="json-field">equipment (equipped/unequipped)</span>
+                </div>
+            </div>
+
+            <button class="download-all" onclick="downloadAllRegions()">
+                Download All Regions as ZIP
+            </button>
+
+            <h3 style="margin: 30px 0 15px 0; color: #333;">Download Individual Regions</h3>
+            <div class="regions-grid" id="regionsGrid"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        let convertedData = {};
+
+        const uploadSection = document.getElementById('uploadSection');
+        const fileInput = document.getElementById('fileInput');
+        const statusDiv = document.getElementById('status');
+        const resultsDiv = document.getElementById('results');
+
+        // Drag and drop handlers
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.classList.add('dragover');
+        });
+
+        uploadSection.addEventListener('dragleave', () => {
+            uploadSection.classList.remove('dragover');
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.name.endsWith('.csv')) {
+                processFile(file);
+            } else {
+                showStatus('Please drop a CSV file', 'error');
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                processFile(file);
+            }
+        });
+
+        function showStatus(message, type) {
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+            statusDiv.style.display = 'block';
+        }
+
+        function parseCSV(text) {
+            const lines = text.split('\n').filter(line => line.trim());
+            const headers = lines[0].split(',').map(h => h.trim());
+            const records = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = parseCSVLine(lines[i]);
+                if (values.length === headers.length) {
+                    const record = {};
+                    headers.forEach((header, index) => {
+                        record[header] = values[index].trim();
+                    });
+                    records.push(record);
+                }
+            }
+
+            return { headers, records };
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+
+            return result;
+        }
+
+        function normalizeLift(lift) {
+            const liftMap = {
+                'squat': 'squat',
+                'bench press': 'bench_press',
+                'bench press a/c': 'bench_press_ac',
+                'bench': 'bench_press',
+                'deadlift': 'deadlift',
+                'total': 'total'
+            };
+            return liftMap[lift.toLowerCase()] || lift.toLowerCase().replace(/\s+/g, '_');
+        }
+
+        function normalizeEquipment(equipment) {
+            const eqMap = {
+                'equipped': 'equipped',
+                'unequipped': 'unequipped',
+                'raw': 'unequipped',
+                'classic': 'unequipped'
+            };
+            return eqMap[equipment.toLowerCase()] || 'unequipped';
+        }
+
+        function normalizeWeightClass(weightClass) {
+            // Remove minus sign prefix (e.g., "-53kg" -> "53kg")
+            return weightClass.replace(/^-/, '');
+        }
+
+        function parseDate(dateStr) {
+            // Handle DD/MM/YYYY format (e.g., "29/04/2023")
+            if (dateStr.includes('/')) {
+                const parts = dateStr.split('/');
+                if (parts.length === 3) {
+                    const day = parts[0].padStart(2, '0');
+                    const month = parts[1].padStart(2, '0');
+                    const year = parts[2];
+                    return `${year}-${month}-${day}`;
+                }
+            }
+
+            // Try to parse other date formats
+            const date = new Date(dateStr);
+            if (!isNaN(date.getTime())) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+            return dateStr;
+        }
+
+        function convertToJSON(csvData) {
+            const { headers, records } = csvData;
+            const converted = [];
+            const errors = [];
+
+            records.forEach((record, index) => {
+                try {
+                    const jsonRecord = {
+                        region: record['Region'] || record['region'] || '',
+                        name: record['Name'] || record['name'] || '',
+                        weightClass: normalizeWeightClass(record['Weight Class'] || record['weightClass'] || ''),
+                        gender: (record['Gender'] || record['gender'] || '').toUpperCase(),
+                        lift: normalizeLift(record['Lift'] || record['lift'] || ''),
+                        ageCategory: record['Age Category'] || record['ageCategory'] || '',
+                        record: parseFloat(record['Record'] || record['record'] || '0'),
+                        dateSet: parseDate(record['Date Set'] || record['dateSet'] || ''),
+                        equipment: normalizeEquipment(record['Equipment'] || record['equipment'] || '')
+                    };
+
+                    // Validation
+                    if (!jsonRecord.region) errors.push(`Row ${index + 2}: Missing region`);
+                    if (!jsonRecord.name) errors.push(`Row ${index + 2}: Missing name`);
+                    if (!['M', 'F'].includes(jsonRecord.gender)) errors.push(`Row ${index + 2}: Invalid gender (must be M or F)`);
+                    if (isNaN(jsonRecord.record)) errors.push(`Row ${index + 2}: Invalid record value`);
+
+                    converted.push(jsonRecord);
+                } catch (error) {
+                    errors.push(`Row ${index + 2}: ${error.message}`);
+                }
+            });
+
+            return { converted, errors };
+        }
+
+        function groupByRegion(records) {
+            const grouped = {};
+            records.forEach(record => {
+                const region = record.region;
+                if (!grouped[region]) {
+                    grouped[region] = [];
+                }
+                grouped[region].push(record);
+            });
+            return grouped;
+        }
+
+        function processFile(file) {
+            showStatus('Processing file...', 'info');
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const text = e.target.result;
+                    const csvData = parseCSV(text);
+                    const { converted, errors } = convertToJSON(csvData);
+
+                    if (errors.length > 0) {
+                        showStatus(`Conversion completed with ${errors.length} warnings. Check console for details.`, 'error');
+                        console.warn('Conversion warnings:', errors);
+                    } else {
+                        showStatus(`Successfully converted ${converted.length} records!`, 'success');
+                    }
+
+                    convertedData = groupByRegion(converted);
+                    displayResults(converted, convertedData);
+
+                } catch (error) {
+                    showStatus(`Error: ${error.message}`, 'error');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function displayResults(allRecords, regionData) {
+            resultsDiv.classList.remove('hidden');
+
+            // Display stats
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${allRecords.length}</div>
+                    <div class="stat-label">Total Records</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${Object.keys(regionData).length}</div>
+                    <div class="stat-label">Regions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${new Set(allRecords.map(r => r.name)).size}</div>
+                    <div class="stat-label">Unique Athletes</div>
+                </div>
+            `;
+
+            // Display region cards
+            const regionsGrid = document.getElementById('regionsGrid');
+            regionsGrid.innerHTML = '';
+
+            Object.keys(regionData).sort().forEach(region => {
+                const records = regionData[region];
+                const card = document.createElement('div');
+                card.className = 'region-card';
+                card.innerHTML = `
+                    <div class="region-name">${region}</div>
+                    <div class="region-count">${records.length} records</div>
+                    <button class="download-btn" onclick="downloadRegion('${region}')">
+                        Download ${region}.json
+                    </button>
+                `;
+                regionsGrid.appendChild(card);
+            });
+        }
+
+        function downloadRegion(region) {
+            const records = convertedData[region];
+            const json = JSON.stringify(records, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${region.toLowerCase().replace(/\s+/g, '-')}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        async function downloadAllRegions() {
+            const zip = new JSZip();
+
+            Object.keys(convertedData).forEach(region => {
+                const records = convertedData[region];
+                const json = JSON.stringify(records, null, 2);
+                const filename = `${region.toLowerCase().replace(/\s+/g, '-')}.json`;
+                zip.file(filename, json);
+            });
+
+            const content = await zip.generateAsync({ type: 'blob' });
+            const url = URL.createObjectURL(content);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bp-records-all-regions.zip';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+[
+  {
+    "region": "London",
+    "name": "Michael Taylor",
+    "weightClass": "93kg",
+    "gender": "M",
+    "lift": "total",
+    "ageCategory": "Open",
+    "record": 725.0,
+    "dateSet": "2023-12-15",
+    "equipment": "equipped"
+  }
+]

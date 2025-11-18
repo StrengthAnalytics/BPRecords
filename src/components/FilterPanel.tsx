@@ -22,25 +22,25 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   // Compute weight classes based on gender and age category
   const availableWeightClasses = useMemo(() => {
-    const isJuniorOrSubJunior = filters.ageCategory === 'Junior' || filters.ageCategory === 'Sub-Junior';
+    const isYouthCategory = filters.ageCategory === 'U16' || filters.ageCategory === 'U18' || filters.ageCategory === 'U23';
 
     if (filters.gender === 'All') {
       // Show all weight classes
       return WEIGHT_CLASSES;
     } else if (filters.gender === 'M') {
       // Male weight classes
-      if (isJuniorOrSubJunior || filters.ageCategory === 'All') {
+      if (isYouthCategory || filters.ageCategory === 'All') {
         return WEIGHT_CLASSES_MALE; // Includes 53kg
       } else {
-        // Exclude 53kg for senior categories
+        // Exclude 53kg for senior categories (Open, M1-M6)
         return WEIGHT_CLASSES_MALE.filter(wc => wc !== '53kg');
       }
     } else if (filters.gender === 'F') {
       // Female weight classes
-      if (isJuniorOrSubJunior || filters.ageCategory === 'All') {
+      if (isYouthCategory || filters.ageCategory === 'All') {
         return WEIGHT_CLASSES_FEMALE; // Includes 43kg
       } else {
-        // Exclude 43kg for senior categories
+        // Exclude 43kg for senior categories (Open, M1-M6)
         return WEIGHT_CLASSES_FEMALE.filter(wc => wc !== '43kg');
       }
     }

@@ -114,13 +114,16 @@ export const LIFTS = [
 
 export const AGE_CATEGORIES = [
   'All',
-  'Sub-Junior',
-  'Junior',
+  'U16',
+  'U18',
+  'U23',
   'Open',
   'M1',
   'M2',
   'M3',
-  'M4'
+  'M4',
+  'M5',
+  'M6'
 ];
 
 export const EQUIPMENT_TYPES = [
