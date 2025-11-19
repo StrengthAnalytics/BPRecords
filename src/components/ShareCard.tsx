@@ -10,11 +10,13 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(({ record }, ref) =
   return (
     <div
       ref={ref}
-      className="fixed top-0 left-0 pointer-events-none opacity-0"
+      className="fixed pointer-events-none"
       style={{
         width: '1080px',
         height: '1920px',
-        zIndex: -1
+        left: '-20000px',
+        top: '0',
+        zIndex: -9999
       }}
     >
       <div className="w-full h-full bg-gradient-to-br from-red-600 via-red-700 to-red-800 text-white p-20 flex flex-col justify-between">
@@ -38,11 +40,11 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(({ record }, ref) =
           </div>
 
           {/* Record Weight - HUGE */}
-          <div className="mb-16">
+          <div className="mb-16 flex items-end justify-center gap-4">
             <div className="text-[280px] font-black leading-none tracking-tighter">
               {record.record}
             </div>
-            <div className="text-8xl font-bold text-red-100 -mt-8">
+            <div className="text-8xl font-bold text-red-100 pb-8">
               KG
             </div>
           </div>

@@ -9,12 +9,8 @@ export const shareRecordImage = async (
   record: PowerliftingRecord
 ): Promise<void> => {
   try {
-    // Temporarily make visible for capture
-    const originalOpacity = shareCardElement.style.opacity;
-    shareCardElement.style.opacity = '1';
-
     // Wait a moment for fonts and layout to fully render
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 200));
 
     // Generate canvas from the share card
     const canvas = await html2canvas(shareCardElement, {
@@ -27,9 +23,6 @@ export const shareRecordImage = async (
       allowTaint: true,
       foreignObjectRendering: false
     });
-
-    // Restore opacity
-    shareCardElement.style.opacity = originalOpacity;
 
     // Convert canvas to blob
     const blob = await new Promise<Blob | null>((resolve) => {
@@ -45,7 +38,31 @@ export const shareRecordImage = async (
     const athleteName = record.name.replace(/\s+/g, '-').toLowerCase();
     const filename = `${athleteName}-${liftName}-${record.record}kg-record.png`;
 
-    // Download image (works on both mobile and desktop)
+    // Try to use Web Share API first (better for mobile)
+    if (navigator.share && navigator.canShare) {
+      const file = new File([blob], filename, { type: 'image/png' });
+
+      try {
+        // Check if we can share files
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: `${record.name} - ${record.record}kg Record`,
+            text: `Check out this ${record.record}kg ${liftName} record by ${record.name}!`
+          });
+          return; // Successfully shared via native share sheet
+        }
+      } catch (err: any) {
+        // User cancelled or share failed
+        if (err.name === 'AbortError') {
+          return; // User cancelled, exit silently
+        }
+        console.log('Share API failed, falling back to download');
+        // Fall through to download
+      }
+    }
+
+    // Fallback: Download image
     downloadImage(blob, filename);
   } catch (error) {
     console.error('Error generating share image:', error);
@@ -58,33 +75,12 @@ export const shareRecordImage = async (
  */
 const downloadImage = (blob: Blob, filename: string): void => {
   const url = URL.createObjectURL(blob);
-
-  // Check if we're on iOS Safari (doesn't support download attribute well)
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-  if (isIOS || isSafari) {
-    // For iOS/Safari: Open in new tab so user can long-press to save
-    const newWindow = window.open(url, '_blank');
-    if (!newWindow) {
-      // Fallback if popup blocked: try regular download
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.target = '_blank';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  } else {
-    // For other browsers: Regular download
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 
   // Cleanup
   setTimeout(() => URL.revokeObjectURL(url), 1000);
