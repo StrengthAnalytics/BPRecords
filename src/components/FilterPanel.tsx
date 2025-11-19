@@ -171,7 +171,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               </IconButton>
             )}
             <IconButton onClick={onPDFExport} variant="primary">
-              📄 Export PDF
+              Export PDF
             </IconButton>
           </div>
           <p className="text-sm text-gray-600 dark:text-slate-400 italic">

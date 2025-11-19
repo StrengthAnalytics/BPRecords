@@ -21,6 +21,7 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
 
   const [showConverter, setShowConverter] = useState(false);
   const [showPDFExport, setShowPDFExport] = useState(false);
+  const [viewMode, setViewMode] = useState<'tile' | 'table'>('tile');
 
   // Secret trigger: typing "JSON" in the name field opens the converter
   useEffect(() => {
@@ -53,6 +54,8 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
         isLoading={isLoading}
         sortBy={sortBy}
         onSortChange={setSortBy}
+        viewMode={viewMode}
+        onViewModeChange={setViewMode}
       />
 
       <CSVConverterModal
