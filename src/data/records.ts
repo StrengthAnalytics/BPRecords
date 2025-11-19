@@ -10,7 +10,7 @@ import type { PowerliftingRecord } from '../types/records';
  * 1. Edit JSON files in data-source/
  * 2. Run: npm run build:data
  *
- * Last generated: 2025-11-19T12:55:51.890Z
+ * Last generated: 2025-11-19T13:27:33.392Z
  */
 
 export const records: PowerliftingRecord[] = [
@@ -10506,6 +10506,61 @@ export const records: PowerliftingRecord[] = [
       ageCategory: "M2",
       record: 175,
       dateSet: "2015-11-14",
+      equipment: "unequipped"
+    },
+    {
+      region: "East Midlands",
+      name: "S Rowlands",
+      weightClass: "43kg",
+      gender: "F",
+      lift: "squat",
+      ageCategory: "U23",
+      record: 90,
+      dateSet: "2013-02-10",
+      equipment: "unequipped"
+    },
+    {
+      region: "East Midlands",
+      name: "S Rowlands",
+      weightClass: "43kg",
+      gender: "F",
+      lift: "bench_press",
+      ageCategory: "U23",
+      record: 50,
+      dateSet: "2013-02-10",
+      equipment: "unequipped"
+    },
+    {
+      region: "East Midlands",
+      name: "S Rowlands",
+      weightClass: "43kg",
+      gender: "F",
+      lift: "deadlift",
+      ageCategory: "U23",
+      record: 115,
+      dateSet: "2013-02-10",
+      equipment: "unequipped"
+    },
+    {
+      region: "East Midlands",
+      name: "S Rowlands",
+      weightClass: "43kg",
+      gender: "F",
+      lift: "bench_press_ac",
+      ageCategory: "U23",
+      record: 50,
+      dateSet: "2013-02-10",
+      equipment: "unequipped"
+    },
+    {
+      region: "East Midlands",
+      name: "S Rowlands",
+      weightClass: "43kg",
+      gender: "F",
+      lift: "total",
+      ageCategory: "U23",
+      record: 255,
+      dateSet: "2013-02-10",
       equipment: "unequipped"
     },
     {

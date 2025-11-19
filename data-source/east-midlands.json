@@ -2752,6 +2752,61 @@
   {
     "region": "East Midlands",
     "name": "S Rowlands",
+    "weightClass": "43kg",
+    "gender": "F",
+    "lift": "squat",
+    "ageCategory": "U23",
+    "record": 90,
+    "dateSet": "2013-02-10",
+    "equipment": "unequipped"
+  },
+  {
+    "region": "East Midlands",
+    "name": "S Rowlands",
+    "weightClass": "43kg",
+    "gender": "F",
+    "lift": "bench_press",
+    "ageCategory": "U23",
+    "record": 50,
+    "dateSet": "2013-02-10",
+    "equipment": "unequipped"
+  },
+  {
+    "region": "East Midlands",
+    "name": "S Rowlands",
+    "weightClass": "43kg",
+    "gender": "F",
+    "lift": "deadlift",
+    "ageCategory": "U23",
+    "record": 115,
+    "dateSet": "2013-02-10",
+    "equipment": "unequipped"
+  },
+  {
+    "region": "East Midlands",
+    "name": "S Rowlands",
+    "weightClass": "43kg",
+    "gender": "F",
+    "lift": "bench_press_ac",
+    "ageCategory": "U23",
+    "record": 50,
+    "dateSet": "2013-02-10",
+    "equipment": "unequipped"
+  },
+  {
+    "region": "East Midlands",
+    "name": "S Rowlands",
+    "weightClass": "43kg",
+    "gender": "F",
+    "lift": "total",
+    "ageCategory": "U23",
+    "record": 255,
+    "dateSet": "2013-02-10",
+    "equipment": "unequipped"
+  },
+  {
+    "region": "East Midlands",
+    "name": "S Rowlands",
     "weightClass": "47kg",
     "gender": "F",
     "lift": "squat",
