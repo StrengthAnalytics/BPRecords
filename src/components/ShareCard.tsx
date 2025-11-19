@@ -33,15 +33,15 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(({ record }, ref) =
         {/* Main Content */}
         <div className="flex-1 flex flex-col justify-center items-center text-center -mt-32">
           {/* Region Record - PROMINENT */}
-          <div className="mb-8">
-            <div className="text-6xl font-black text-red-50">
+          <div className="mb-16">
+            <div className="text-8xl font-black text-red-50 leading-tight">
               {record.region.toUpperCase()} RECORD
             </div>
           </div>
 
           {/* Lifter Name */}
-          <div className="mb-12">
-            <div className="text-7xl font-black leading-tight mb-4">
+          <div className="mb-16">
+            <div className="text-7xl font-black leading-tight">
               {record.name}
             </div>
           </div>
