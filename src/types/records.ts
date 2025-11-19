@@ -39,6 +39,7 @@ export interface RecordsHubProps {
 export const REGIONS = [
   'All',
   'British',
+  'British Universities',
   'England',
   'Scotland',
   'Wales',
