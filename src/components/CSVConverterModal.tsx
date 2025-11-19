@@ -59,15 +59,29 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
   };
 
   const normalizeLift = (lift: string): string => {
+    // Normalize the input: lowercase, remove extra spaces, normalize parentheses
+    const normalized = lift.toLowerCase()
+      .replace(/\s*\(\s*/g, ' (')  // Normalize space before opening parenthesis
+      .replace(/\s*\)\s*/g, ')')   // Remove space before closing parenthesis
+      .replace(/\s+/g, ' ')        // Collapse multiple spaces
+      .trim();
+
     const liftMap: { [key: string]: string } = {
       'squat': 'squat',
       'bench press': 'bench_press',
-      'bench press a/c': 'bench_press_ac',
       'bench': 'bench_press',
+      'bench press a/c': 'bench_press_ac',
+      'bench press (a/c)': 'bench_press_ac',
+      'bench a/c': 'bench_press_ac',
+      'bench (a/c)': 'bench_press_ac',
+      'bench press ac': 'bench_press_ac',
+      'bench ac': 'bench_press_ac',
       'deadlift': 'deadlift',
+      'dead lift': 'deadlift',
       'total': 'total'
     };
-    return liftMap[lift.toLowerCase()] || lift.toLowerCase().replace(/\s+/g, '_');
+
+    return liftMap[normalized] || lift.toLowerCase().replace(/\s+/g, '_');
   };
 
   const normalizeEquipment = (equipment: string): string => {
@@ -78,6 +92,30 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
       'classic': 'unequipped'
     };
     return eqMap[equipment.toLowerCase()] || 'unequipped';
+  };
+
+  const normalizeAgeCategory = (ageCategory: string): string => {
+    const trimmed = ageCategory.trim();
+    const upper = trimmed.toUpperCase();
+
+    // Map common variations and abbreviations
+    const ageCategoryMap: { [key: string]: string } = {
+      'OPEN': 'Open',
+      'O': 'Open',
+      'J': 'U18',        // Junior → U18
+      'SJ': 'U16',       // Sub-Junior → U16
+      'U16': 'U16',
+      'U18': 'U18',
+      'U23': 'U23',
+      'M1': 'M1',
+      'M2': 'M2',
+      'M3': 'M3',
+      'M4': 'M4',
+      'M5': 'M5',
+      'M6': 'M6'
+    };
+
+    return ageCategoryMap[upper] || trimmed;
   };
 
   const normalizeWeightClass = (weightClass: string): string => {
@@ -115,7 +153,7 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
       weightClass: normalizeWeightClass(record['Weight Class'] || record['weightClass'] || ''),
       gender: (record['Gender'] || record['gender'] || '').toUpperCase() as 'M' | 'F',
       lift: normalizeLift(record['Lift'] || record['lift'] || '') as any,
-      ageCategory: record['Age Category'] || record['ageCategory'] || '',
+      ageCategory: normalizeAgeCategory(record['Age Category'] || record['ageCategory'] || ''),
       record: parseFloat(record['Record'] || record['record'] || '0'),
       dateSet: parseDate(record['Date Set'] || record['dateSet'] || ''),
       equipment: normalizeEquipment(record['Equipment'] || record['equipment'] || '') as any
