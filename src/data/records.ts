@@ -10,7 +10,7 @@ import type { PowerliftingRecord } from '../types/records';
  * 1. Edit JSON files in data-source/
  * 2. Run: npm run build:data
  *
- * Last generated: 2025-11-19T12:26:44.960Z
+ * Last generated: 2025-11-19T12:34:59.390Z
  */
 
 export const records: PowerliftingRecord[] = [
@@ -25452,7 +25452,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "squat",
-      ageCategory: "U16",
+      ageCategory: "U18",
       record: 140,
       dateSet: "2019-11-02",
       equipment: "unequipped"
@@ -25518,7 +25518,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "bench_press",
-      ageCategory: "U16",
+      ageCategory: "U18",
       record: 70,
       dateSet: "2020-01-26",
       equipment: "unequipped"
@@ -25529,7 +25529,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "bench_press",
-      ageCategory: "U18",
+      ageCategory: "U23",
       record: 100,
       dateSet: "2018-04-14",
       equipment: "unequipped"
@@ -25584,7 +25584,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "deadlift",
-      ageCategory: "U16",
+      ageCategory: "U18",
       record: 175,
       dateSet: "2020-01-26",
       equipment: "unequipped"
@@ -25595,7 +25595,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "deadlift",
-      ageCategory: "U18",
+      ageCategory: "U23",
       record: 190,
       dateSet: "2018-04-14",
       equipment: "unequipped"
@@ -25650,7 +25650,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "total",
-      ageCategory: "U16",
+      ageCategory: "U18",
       record: 380,
       dateSet: "2020-01-26",
       equipment: "unequipped"
@@ -25661,7 +25661,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "total",
-      ageCategory: "U18",
+      ageCategory: "U23",
       record: 490,
       dateSet: "2018-04-14",
       equipment: "unequipped"
@@ -25716,7 +25716,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "bench_press_ac",
-      ageCategory: "U16",
+      ageCategory: "U18",
       record: 70,
       dateSet: "2020-01-26",
       equipment: "unequipped"
@@ -25727,7 +25727,7 @@ export const records: PowerliftingRecord[] = [
       weightClass: "84kg+",
       gender: "F",
       lift: "bench_press_ac",
-      ageCategory: "U18",
+      ageCategory: "U23",
       record: 100,
       dateSet: "2018-04-14",
       equipment: "unequipped"
