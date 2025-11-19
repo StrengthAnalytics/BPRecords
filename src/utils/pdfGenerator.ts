@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { PowerliftingRecord } from '../types/records';
-import { WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, AGE_CATEGORIES } from '../types/records';
+import { WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, AGE_CATEGORIES_PDF } from '../types/records';
 
 interface RecordCell {
   name: string;
@@ -35,6 +35,18 @@ const LIFT_ORDER: Array<keyof typeof LIFT_LABELS> = [
   'bench_press_ac',
 ];
 
+// Normalize age category to handle existing data inconsistencies
+function normalizeAgeCategory(ageCategory: string): string {
+  const upper = ageCategory.toUpperCase();
+
+  // Map variations to standard format
+  if (upper === 'OPEN' || upper === 'O') return 'Open';
+
+  // Return as-is for other categories (already uppercase in data: U16, U18, U23, M1, etc.)
+  // J and SJ are already correct
+  return ageCategory;
+}
+
 // Determine which age categories apply to a weight class
 function getAgeCategoriesForWeightClass(weightClass: string, gender: 'M' | 'F'): string[] {
   const youthWeightClasses = gender === 'M' ? ['53kg'] : ['43kg'];
@@ -44,7 +56,8 @@ function getAgeCategoriesForWeightClass(weightClass: string, gender: 'M' | 'F'):
     return ['U16', 'U18', 'U23'];
   }
 
-  return AGE_CATEGORIES.filter(cat => cat !== 'All');
+  // Use individual age categories for PDF (not grouped)
+  return AGE_CATEGORIES_PDF;
 }
 
 // Organize records by weight class and lift type
@@ -73,8 +86,11 @@ function organizeRecords(
     .forEach(record => {
       const { weightClass, lift, ageCategory, name, record: weight, dateSet } = record;
 
+      // Normalize age category to handle data inconsistencies (open/O -> Open)
+      const normalizedAge = normalizeAgeCategory(ageCategory);
+
       if (organized[weightClass] && organized[weightClass][lift]) {
-        organized[weightClass][lift][ageCategory] = {
+        organized[weightClass][lift][normalizedAge] = {
           name,
           weight,
           date: dateSet,
