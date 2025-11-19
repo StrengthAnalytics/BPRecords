@@ -66,7 +66,17 @@ function App() {
 
       {/* Footer */}
       <footer className="bg-gray-800 dark:bg-slate-950 text-gray-400 py-6 px-4 text-center mt-12">
-        <p>British Powerlifting Records Hub • Data compiled from official competitions</p>
+        <p>
+          British Powerlifting Records Hub • Powered By{' '}
+          <a
+            href="https://www.strengthanalytics.co.uk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-red-400 hover:text-red-300 transition-colors underline"
+          >
+            Strength Analytics
+          </a>
+        </p>
       </footer>
     </div>
   );
