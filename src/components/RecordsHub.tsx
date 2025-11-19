@@ -25,6 +25,7 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
   const [showPDFExport, setShowPDFExport] = useState(false);
   const [viewMode, setViewMode] = useState<'tile' | 'table'>('tile');
   const [visibleCount, setVisibleCount] = useState(20);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   // Constants for load more functionality
   const ITEMS_PER_PAGE = 20;
@@ -56,6 +57,20 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
       updateFilter('name', ''); // Clear the name field
     }
   }, [filters.name, updateFilter]);
+
+  // Show/hide "Back to Top" button based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 400);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-16">
@@ -114,6 +129,29 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
           allRecords={allRecords}
         />
       </PDFErrorBoundary>
+
+      {/* Back to Top Button */}
+      {showBackToTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 p-4 bg-red-600 hover:bg-red-700 text-white rounded-full shadow-2xl hover:shadow-xl transition-all transform hover:scale-110 z-40"
+          aria-label="Back to top"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 10l7-7m0 0l7 7m-7-7v18"
+            />
+          </svg>
+        </button>
+      )}
     </div>
   );
 };

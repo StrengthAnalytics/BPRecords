@@ -129,8 +129,7 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       {records.length === 0 ? (
         !hasActiveFilters ? (
           // No filters applied - Show onboarding
-          <div className="text-center py-16 px-6">
-            <div className="text-8xl mb-6">🏋️</div>
+          <div className="text-center py-8 px-6">
             <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
               Welcome to British Powerlifting Records
             </h3>
