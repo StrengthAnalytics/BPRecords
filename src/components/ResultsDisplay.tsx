@@ -8,6 +8,7 @@ type ViewMode = 'tile' | 'table';
 
 interface ResultsDisplayProps {
   records: PowerliftingRecord[];
+  totalCount: number;
   isLoading: boolean;
   sortBy: 'weight' | 'date' | 'name';
   onSortChange: (sortBy: 'weight' | 'date' | 'name') => void;
@@ -28,6 +29,7 @@ const SkeletonCard: React.FC = () => (
 
 const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   records,
+  totalCount,
   isLoading,
   sortBy,
   onSortChange,
@@ -46,8 +48,16 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
     );
   }
 
+  const getTitle = () => {
+    if (totalCount === 0) return 'Results';
+    if (totalCount > records.length) {
+      return `Results (${totalCount}) - Top ${records.length} shown`;
+    }
+    return `Results (${totalCount})`;
+  };
+
   return (
-    <Section title={records.length > 0 ? `Results (${records.length})` : 'Results'} emoji="📊">
+    <Section title={getTitle()} emoji="📊">
       {records.length > 0 && (
         <div className="mb-10 flex flex-col lg:flex-row gap-6 lg:gap-4 lg:items-center lg:justify-between">
           <div className="flex gap-4 items-center flex-wrap">
@@ -131,19 +141,19 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
           ))}
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-xl border-2 border-gray-200 dark:border-slate-700 shadow-lg">
-          <table className="w-full min-w-max">
+        <div className="-mx-4 md:mx-0 overflow-x-auto rounded-none md:rounded-xl border-y-2 md:border-2 border-gray-200 dark:border-slate-700 shadow-lg">
+          <table className="w-full">
             <thead className="bg-red-600 dark:bg-red-700 text-white">
               <tr>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Name</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Weight (kg)</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Lift</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Weight Class</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Equipment</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Gender</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Age Category</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Region</th>
-                <th className="px-4 py-4 text-left font-bold text-sm whitespace-nowrap">Date</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Name</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Weight</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Lift</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Class</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Equip</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Gender</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Age</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Region</th>
+                <th className="px-2 md:px-3 py-2 md:py-3 text-left font-bold text-xs md:text-sm whitespace-nowrap">Date</th>
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
@@ -152,33 +162,33 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
                   key={`${record.name}-${record.lift}-${index}`}
                   className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
                 >
-                  <td className="px-4 py-4 font-semibold text-gray-900 dark:text-slate-100 whitespace-nowrap">
+                  <td className="px-2 md:px-3 py-2 md:py-3 font-semibold text-gray-900 dark:text-slate-100 text-xs md:text-sm whitespace-nowrap">
                     {record.name}
                   </td>
-                  <td className="px-4 py-4 font-bold text-red-600 dark:text-red-500 whitespace-nowrap">
-                    {record.record}
+                  <td className="px-2 md:px-3 py-2 md:py-3 font-bold text-red-600 dark:text-red-500 text-xs md:text-sm whitespace-nowrap">
+                    {record.record}kg
                   </td>
-                  <td className="px-4 py-4 text-gray-700 dark:text-slate-300 whitespace-nowrap">
+                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
                     {formatLiftName(record.lift)}
                   </td>
-                  <td className="px-4 py-4 text-gray-700 dark:text-slate-300 whitespace-nowrap">
+                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
                     {record.weightClass}
                   </td>
-                  <td className="px-4 py-4 text-gray-700 dark:text-slate-300 whitespace-nowrap">
+                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
                     {formatEquipment(record.equipment)}
                   </td>
-                  <td className="px-4 py-4 text-gray-700 dark:text-slate-300 whitespace-nowrap">
+                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
                     {formatGender(record.gender)}
                   </td>
-                  <td className="px-4 py-4 text-gray-700 dark:text-slate-300 whitespace-nowrap">
+                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
                     {record.ageCategory}
                   </td>
-                  <td className="px-4 py-4 whitespace-nowrap">
-                    <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-3 py-1.5 rounded-full font-bold">
+                  <td className="px-2 md:px-3 py-2 md:py-3 whitespace-nowrap">
+                    <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-2 py-1 rounded-full font-bold">
                       {record.region}
                     </span>
                   </td>
-                  <td className="px-4 py-4 text-gray-600 dark:text-slate-400 whitespace-nowrap">
+                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-600 dark:text-slate-400 text-xs md:text-sm whitespace-nowrap">
                     {formatDate(record.dateSet)}
                   </td>
                 </tr>

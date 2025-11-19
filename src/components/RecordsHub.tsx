@@ -23,6 +23,11 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
   const [showPDFExport, setShowPDFExport] = useState(false);
   const [viewMode, setViewMode] = useState<'tile' | 'table'>('tile');
 
+  // Limit results to top 100 for performance
+  const MAX_RESULTS = 100;
+  const totalCount = filteredRecords.length;
+  const displayedRecords = filteredRecords.slice(0, MAX_RESULTS);
+
   // Secret trigger: typing "JSON" in the name field opens the converter
   useEffect(() => {
     if (filters.name.toUpperCase() === 'JSON') {
@@ -50,7 +55,8 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
       />
 
       <ResultsDisplay
-        records={filteredRecords}
+        records={displayedRecords}
+        totalCount={totalCount}
         isLoading={isLoading}
         sortBy={sortBy}
         onSortChange={setSortBy}
