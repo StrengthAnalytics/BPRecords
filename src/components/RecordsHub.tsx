@@ -24,11 +24,22 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
   const [showConverter, setShowConverter] = useState(false);
   const [showPDFExport, setShowPDFExport] = useState(false);
   const [viewMode, setViewMode] = useState<'tile' | 'table'>('tile');
+  const [visibleCount, setVisibleCount] = useState(20);
 
-  // Limit results to top 100 for performance
+  // Constants for load more functionality
+  const ITEMS_PER_PAGE = 20;
   const MAX_RESULTS = 100;
+
   const totalCount = filteredRecords.length;
-  const displayedRecords = filteredRecords.slice(0, MAX_RESULTS);
+  const cappedResults = filteredRecords.slice(0, MAX_RESULTS);
+  const displayedRecords = cappedResults.slice(0, visibleCount);
+  const hasMore = visibleCount < cappedResults.length;
+  const remainingCount = cappedResults.length - visibleCount;
+
+  // Reset visible count when filters change
+  useEffect(() => {
+    setVisibleCount(ITEMS_PER_PAGE);
+  }, [filters]);
 
   // Secret trigger: typing "JSON" in the name field opens the converter
   useEffect(() => {
@@ -67,6 +78,26 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
           onViewModeChange={setViewMode}
         />
       </ErrorBoundary>
+
+      {/* Load More Button */}
+      {hasMore && !isLoading && (
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => setVisibleCount(prev => Math.min(prev + ITEMS_PER_PAGE, cappedResults.length))}
+            className="px-8 py-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+          >
+            Load {Math.min(ITEMS_PER_PAGE, remainingCount)} More
+            <span className="ml-2 text-red-100">
+              ({remainingCount} remaining)
+            </span>
+          </button>
+          {cappedResults.length >= MAX_RESULTS && (
+            <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
+              Results limited to top {MAX_RESULTS} records for performance
+            </p>
+          )}
+        </div>
+      )}
 
       <ErrorBoundary>
         <CSVConverterModal
