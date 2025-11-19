@@ -39,20 +39,20 @@ export interface RecordsHubProps {
 export const REGIONS = [
   'All',
   'British',
-  'British Universities',
   'England',
-  'Scotland',
   'Wales',
+  'Scotland',
   'Northern Ireland',
-  'North East',
+  'Yorkshire & North East',
   'North West',
-  'Yorkshire',
+  'North Midlands',
   'East Midlands',
   'West Midlands',
-  'East of England',
-  'London',
+  'Greater London',
+  'South West',
+  'South Midlands',
   'South East',
-  'South West'
+  'British Universities'
 ];
 
 export const WEIGHT_CLASSES_MALE = [
