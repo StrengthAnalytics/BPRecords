@@ -88,9 +88,7 @@ const RecordCard: React.FC<RecordCardProps> = ({ record }) => {
       </div>
 
       {/* Hidden ShareCard for image generation */}
-      <div ref={shareCardRef}>
-        <ShareCard record={record} />
-      </div>
+      <ShareCard ref={shareCardRef} record={record} />
     </div>
   );
 };

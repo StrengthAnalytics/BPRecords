@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import type { PowerliftingRecord } from '../types/records';
 import { formatDate, formatLiftName, formatEquipment } from '../utils/recordsFormatters';
 
@@ -6,11 +6,16 @@ interface ShareCardProps {
   record: PowerliftingRecord;
 }
 
-const ShareCard: React.FC<ShareCardProps> = ({ record }) => {
+const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(({ record }, ref) => {
   return (
     <div
-      className="absolute -left-[10000px] top-0"
-      style={{ width: '1080px', height: '1920px' }}
+      ref={ref}
+      className="fixed top-0 left-0 pointer-events-none opacity-0"
+      style={{
+        width: '1080px',
+        height: '1920px',
+        zIndex: -1
+      }}
     >
       <div className="w-full h-full bg-gradient-to-br from-red-600 via-red-700 to-red-800 text-white p-20 flex flex-col justify-between">
         {/* Header */}
@@ -79,6 +84,8 @@ const ShareCard: React.FC<ShareCardProps> = ({ record }) => {
       </div>
     </div>
   );
-};
+});
+
+ShareCard.displayName = 'ShareCard';
 
 export default ShareCard;
