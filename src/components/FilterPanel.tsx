@@ -23,7 +23,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   // Compute weight classes based on gender and age category
   const availableWeightClasses = useMemo(() => {
-    const isYouthCategory = filters.ageCategory === 'U16' || filters.ageCategory === 'U18' || filters.ageCategory === 'U23';
+    const isYouthCategory =
+      filters.ageCategory === 'Sub-Junior (U16-U18)' ||
+      filters.ageCategory === 'Junior (U23)';
 
     if (filters.gender === 'All') {
       // Show all weight classes
