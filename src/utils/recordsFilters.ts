@@ -19,6 +19,10 @@ const matchesAgeCategory = (recordAge: string, filterAge: string): boolean => {
   if (filterAge === 'Junior (U23)') {
     return recordAge === 'U23' || recordAge === 'J';
   }
+  // Handle "Open" variations (catches existing inconsistent data)
+  if (filterAge === 'Open') {
+    return recordAge === 'Open' || recordAge === 'open' || recordAge === 'O';
+  }
   // Direct match for other categories
   return recordAge === filterAge;
 };
