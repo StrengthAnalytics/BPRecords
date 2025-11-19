@@ -67,13 +67,36 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-10 md:p-12 mb-10">
       <div className="mb-10">
         <label className={labelClass}>Search by Lifter Name</label>
-        <input
-          type="text"
-          placeholder="e.g. John Smith"
-          value={filters.name}
-          onChange={(e) => onFilterChange('name', e.target.value)}
-          className={inputClass}
-        />
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="e.g. John Smith"
+            value={filters.name}
+            onChange={(e) => onFilterChange('name', e.target.value)}
+            className={inputClass}
+          />
+          {filters.name && (
+            <button
+              onClick={() => onFilterChange('name', '')}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors"
+              aria-label="Clear name search"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
