@@ -47,6 +47,25 @@ function normalizeAgeCategory(ageCategory: string): string {
   return ageCategory;
 }
 
+// Determine which age categories have at least one record for this weight class
+function getPopulatedAgeCategories(
+  weightClass: string,
+  records: RecordsByWeightAndLift[string],
+  gender: 'M' | 'F'
+): string[] {
+  const youthWeightClasses = gender === 'M' ? ['53kg'] : ['43kg'];
+  const isYouthOnly = youthWeightClasses.includes(weightClass);
+
+  // Get base age categories for this weight class
+  const baseCategories = isYouthOnly ? ['U16', 'U18', 'U23'] : AGE_CATEGORIES_PDF;
+
+  // Filter to only include age categories that have at least one record
+  return baseCategories.filter(ageCategory => {
+    // Check if any lift has a record for this age category
+    return LIFT_ORDER.some(lift => records[lift][ageCategory] != null);
+  });
+}
+
 // Determine which age categories apply to a weight class
 function getAgeCategoriesForWeightClass(weightClass: string, gender: 'M' | 'F'): string[] {
   const youthWeightClasses = gender === 'M' ? ['53kg'] : ['43kg'];
@@ -136,11 +155,16 @@ function generatePortraitPDF(
   let yPosition = 26;
 
   validWeightClasses.forEach((weightClass) => {
-    const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
     const records = organizedRecords[weightClass];
-    const isYouthOnly = weightClass === youthWeightClass;
-
     if (!records) return;
+
+    // Only show age categories that have at least one record
+    const ageCategories = getPopulatedAgeCategories(weightClass, records, gender);
+
+    // Skip this weight class if it has no records at all
+    if (ageCategories.length === 0) return;
+
+    const isYouthOnly = weightClass === youthWeightClass;
 
     // Calculate table height - youth classes are smaller
     const tableHeight = isYouthOnly ? 22 : 38;
@@ -229,11 +253,16 @@ function generateLandscapePDF(
   let yPosition = 26;
 
   validWeightClasses.forEach((weightClass) => {
-    const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
     const records = organizedRecords[weightClass];
-    const isYouthOnly = weightClass === youthWeightClass;
-
     if (!records) return;
+
+    // Only show age categories that have at least one record
+    const ageCategories = getPopulatedAgeCategories(weightClass, records, gender);
+
+    // Skip this weight class if it has no records at all
+    if (ageCategories.length === 0) return;
+
+    const isYouthOnly = weightClass === youthWeightClass;
 
     // Calculate table height - youth classes are smaller
     const tableHeight = isYouthOnly ? 18 : 32;
