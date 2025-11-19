@@ -52,6 +52,7 @@ export const REGIONS = [
   'East of England',
   'London',
   'South East',
+  'South Midlands',
   'South West'
 ];
 
