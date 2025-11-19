@@ -2,7 +2,7 @@ import html2canvas from 'html2canvas';
 import type { PowerliftingRecord } from '../types/records';
 
 /**
- * Generate and share/download a record image
+ * Generate and download a record image
  */
 export const shareRecordImage = async (
   shareCardElement: HTMLElement,
@@ -33,32 +33,7 @@ export const shareRecordImage = async (
     const athleteName = record.name.replace(/\s+/g, '-').toLowerCase();
     const filename = `${athleteName}-${liftName}-${record.record}kg-record.png`;
 
-    // Try native share (mobile/modern browsers)
-    if (navigator.share && navigator.canShare) {
-      const file = new File([blob], filename, { type: 'image/png' });
-
-      const canShareFiles = navigator.canShare({ files: [file] });
-
-      if (canShareFiles) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: `${record.name} - ${record.record}kg Record`,
-            text: `${record.name} set a ${record.record}kg ${record.lift} record!`
-          });
-          return;
-        } catch (err: any) {
-          // User cancelled share or share failed
-          if (err.name === 'AbortError') {
-            return; // User cancelled, silently exit
-          }
-          console.error('Share failed:', err);
-          // Fall through to download
-        }
-      }
-    }
-
-    // Fallback: Download image
+    // Download image (works on both mobile and desktop)
     downloadImage(blob, filename);
   } catch (error) {
     console.error('Error generating share image:', error);
