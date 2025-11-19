@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import type { PowerliftingRecord } from '../types/records';
 import { REGIONS, WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE } from '../types/records';
 import { generateRecordsPDF } from '../utils/pdfGenerator';
@@ -10,7 +10,22 @@ interface PDFExportModalProps {
 }
 
 const PDFExportModal: React.FC<PDFExportModalProps> = ({ isOpen, onClose, allRecords }) => {
-  const [region, setRegion] = useState('British');
+  // Compute available regions based on uploaded records
+  const availableRegions = useMemo(() => {
+    // Get unique regions from the actual records data
+    const regionsWithData = new Set(allRecords.map(record => record.region));
+
+    // Filter REGIONS to exclude 'All' and only include regions that have data
+    return REGIONS.filter(region =>
+      region !== 'All' && regionsWithData.has(region)
+    );
+  }, [allRecords]);
+
+  // Set default region to first available region, or 'British' if it exists
+  const [region, setRegion] = useState(() => {
+    if (availableRegions.includes('British')) return 'British';
+    return availableRegions[0] || 'British';
+  });
   const [gender, setGender] = useState<'M' | 'F'>('M');
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
   const [isGenerating, setIsGenerating] = useState(false);
@@ -63,7 +78,7 @@ const PDFExportModal: React.FC<PDFExportModalProps> = ({ isOpen, onClose, allRec
               onChange={(e) => setRegion(e.target.value)}
               className="w-full px-4 py-4 text-base border-2 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-4 focus:ring-red-500/20 focus:border-red-500 dark:focus:ring-red-600/20 dark:focus:border-red-600 transition-all shadow-sm hover:border-red-400 dark:hover:border-red-500"
             >
-              {REGIONS.filter(r => r !== 'All').map(r => (
+              {availableRegions.map(r => (
                 <option key={r} value={r}>{r}</option>
               ))}
             </select>

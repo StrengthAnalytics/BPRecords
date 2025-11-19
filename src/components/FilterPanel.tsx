@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import type { FilterState } from '../types/records';
 import { REGIONS, WEIGHT_CLASSES, WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, LIFTS, AGE_CATEGORIES, EQUIPMENT_TYPES, GENDERS } from '../types/records';
+import { records } from '../data/records';
 import IconButton from './IconButton';
 
 interface FilterPanelProps {
@@ -50,6 +51,17 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
     return WEIGHT_CLASSES;
   }, [filters.gender, filters.ageCategory]);
+
+  // Compute available regions based on uploaded records
+  const availableRegions = useMemo(() => {
+    // Get unique regions from the actual records data
+    const regionsWithData = new Set(records.map(record => record.region));
+
+    // Filter REGIONS to only include 'All' and regions that have data
+    return REGIONS.filter(region =>
+      region === 'All' || regionsWithData.has(region)
+    );
+  }, []);
 
   return (
     <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-10 md:p-12 mb-10">
@@ -129,7 +141,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             onChange={(e) => onFilterChange('region', e.target.value)}
             className={inputClass}
           >
-            {REGIONS.map(region => (
+            {availableRegions.map(region => (
               <option key={region} value={region}>{region}</option>
             ))}
           </select>
