@@ -66,19 +66,6 @@ function getPopulatedAgeCategories(
   });
 }
 
-// Determine which age categories apply to a weight class
-function getAgeCategoriesForWeightClass(weightClass: string, gender: 'M' | 'F'): string[] {
-  const youthWeightClasses = gender === 'M' ? ['53kg'] : ['43kg'];
-  const isYouthOnly = youthWeightClasses.includes(weightClass);
-
-  if (isYouthOnly) {
-    return ['U16', 'U18', 'U23'];
-  }
-
-  // Use individual age categories for PDF (not grouped)
-  return AGE_CATEGORIES_PDF;
-}
-
 // Organize records by weight class and lift type
 function organizeRecords(
   records: PowerliftingRecord[],
