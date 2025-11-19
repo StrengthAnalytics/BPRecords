@@ -76,6 +76,7 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
           onSortChange={setSortBy}
           viewMode={viewMode}
           onViewModeChange={setViewMode}
+          hasActiveFilters={hasActiveFilters}
         />
       </ErrorBoundary>
 

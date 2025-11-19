@@ -14,6 +14,7 @@ interface ResultsDisplayProps {
   onSortChange: (sortBy: 'weight' | 'date' | 'name') => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  hasActiveFilters: boolean;
 }
 
 const SkeletonCard: React.FC = () => (
@@ -34,7 +35,8 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   sortBy,
   onSortChange,
   viewMode,
-  onViewModeChange
+  onViewModeChange,
+  hasActiveFilters
 }) => {
   if (isLoading) {
     return (
@@ -125,15 +127,101 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       )}
 
       {records.length === 0 ? (
-        <div className="text-center py-24 px-6">
-          <div className="text-8xl mb-8">📊</div>
-          <h3 className="text-3xl font-bold text-gray-700 dark:text-slate-300 mb-4">
-            Ready to find records?
-          </h3>
-          <p className="text-xl text-gray-500 dark:text-slate-400 max-w-md mx-auto">
-            Select your criteria above to view results
-          </p>
-        </div>
+        !hasActiveFilters ? (
+          // No filters applied - Show onboarding
+          <div className="text-center py-16 px-6">
+            <div className="text-8xl mb-6">🏋️</div>
+            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+              Welcome to British Powerlifting Records
+            </h3>
+            <p className="text-xl text-gray-600 dark:text-slate-300 max-w-2xl mx-auto mb-8">
+              Search through thousands of powerlifting records from across the UK
+            </p>
+
+            {/* Quick Start Guide */}
+            <div className="max-w-3xl mx-auto bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl p-8 text-left">
+              <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
+                🚀 Quick Start Guide
+              </h4>
+              <div className="space-y-3 text-gray-700 dark:text-slate-300">
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">1️⃣</span>
+                  <div>
+                    <strong>Select a Region</strong>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Choose British, England, Scotland, Wales, or a specific region
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">2️⃣</span>
+                  <div>
+                    <strong>Pick a Weight Class</strong>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Filter by competition weight category (e.g., 83kg, 93kg)
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">3️⃣</span>
+                  <div>
+                    <strong>Choose a Lift</strong>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Squat, Bench Press, Deadlift, or Total
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl">4️⃣</span>
+                  <div>
+                    <strong>Optional: Search by Name</strong>
+                    <p className="text-sm text-gray-600 dark:text-slate-400">
+                      Find a specific lifter's records
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Popular Searches Hint */}
+            <div className="mt-8">
+              <p className="text-sm font-semibold text-gray-700 dark:text-slate-300 mb-3">
+                💡 Popular searches include:
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center text-sm">
+                <span className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg font-medium">
+                  British • Men • 83kg • Squat
+                </span>
+                <span className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg font-medium">
+                  Scotland • Women • Total
+                </span>
+                <span className="px-4 py-2 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-lg font-medium">
+                  England • Open • Deadlift
+                </span>
+              </div>
+            </div>
+          </div>
+        ) : (
+          // Filters applied but no matches
+          <div className="text-center py-24 px-6">
+            <div className="text-8xl mb-8">🔍</div>
+            <h3 className="text-3xl font-bold text-gray-700 dark:text-slate-300 mb-4">
+              No Records Found
+            </h3>
+            <p className="text-xl text-gray-500 dark:text-slate-400 max-w-md mx-auto mb-6">
+              No records match your current filters
+            </p>
+            <div className="text-sm text-gray-600 dark:text-slate-400 space-y-2">
+              <p className="font-semibold">Try:</p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Selecting a different weight class</li>
+                <li>Choosing a different region</li>
+                <li>Checking your lifter name spelling</li>
+                <li>Clearing all filters and starting over</li>
+              </ul>
+            </div>
+          </div>
+        )
       ) : viewMode === 'tile' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {records.map((record, index) => (
