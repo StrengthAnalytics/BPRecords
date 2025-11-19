@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import RecordsHub from './components/RecordsHub';
+import DataErrorBoundary from './components/DataErrorBoundary';
 import type { BrandingState } from './types/records';
 
 function App() {
@@ -58,7 +59,9 @@ function App() {
 
       {/* Main Content */}
       <div className="flex-1">
-        <RecordsHub branding={branding} />
+        <DataErrorBoundary>
+          <RecordsHub branding={branding} />
+        </DataErrorBoundary>
       </div>
 
       {/* Footer */}

@@ -6,6 +6,8 @@ import FilterPanel from './FilterPanel';
 import ResultsDisplay from './ResultsDisplay';
 import CSVConverterModal from './CSVConverterModal';
 import PDFExportModal from './PDFExportModal';
+import PDFErrorBoundary from './PDFErrorBoundary';
+import ErrorBoundary from './ErrorBoundary';
 
 const RecordsHub: React.FC<RecordsHubProps> = () => {
   const { allRecords, isLoading } = useRecordsData();
@@ -54,26 +56,32 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
         onPDFExport={() => setShowPDFExport(true)}
       />
 
-      <ResultsDisplay
-        records={displayedRecords}
-        totalCount={totalCount}
-        isLoading={isLoading}
-        sortBy={sortBy}
-        onSortChange={setSortBy}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-      />
+      <ErrorBoundary>
+        <ResultsDisplay
+          records={displayedRecords}
+          totalCount={totalCount}
+          isLoading={isLoading}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+        />
+      </ErrorBoundary>
 
-      <CSVConverterModal
-        isOpen={showConverter}
-        onClose={() => setShowConverter(false)}
-      />
+      <ErrorBoundary>
+        <CSVConverterModal
+          isOpen={showConverter}
+          onClose={() => setShowConverter(false)}
+        />
+      </ErrorBoundary>
 
-      <PDFExportModal
-        isOpen={showPDFExport}
-        onClose={() => setShowPDFExport(false)}
-        allRecords={allRecords}
-      />
+      <PDFErrorBoundary onClose={() => setShowPDFExport(false)}>
+        <PDFExportModal
+          isOpen={showPDFExport}
+          onClose={() => setShowPDFExport(false)}
+          allRecords={allRecords}
+        />
+      </PDFErrorBoundary>
     </div>
   );
 };
