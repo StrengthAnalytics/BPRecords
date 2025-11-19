@@ -114,9 +114,24 @@ export const LIFTS = [
 
 export const AGE_CATEGORIES = [
   'All',
+  'Sub-Junior (U16-U18)',
+  'Junior (U23)',
+  'Open',
+  'M1',
+  'M2',
+  'M3',
+  'M4',
+  'M5',
+  'M6'
+];
+
+// Individual age categories for PDF generation (each region has separate records)
+export const AGE_CATEGORIES_PDF = [
   'U16',
   'U18',
+  'SJ',   // Sub-Junior
   'U23',
+  'J',    // Junior
   'Open',
   'M1',
   'M2',

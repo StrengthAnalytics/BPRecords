@@ -11,6 +11,22 @@ const normalizeLift = (lift: string): string => {
   return liftMap[lift] || lift.toLowerCase();
 };
 
+const matchesAgeCategory = (recordAge: string, filterAge: string): boolean => {
+  // Handle grouped age categories
+  if (filterAge === 'Sub-Junior (U16-U18)') {
+    return recordAge === 'U16' || recordAge === 'U18' || recordAge === 'SJ';
+  }
+  if (filterAge === 'Junior (U23)') {
+    return recordAge === 'U23' || recordAge === 'J';
+  }
+  // Handle "Open" variations (catches existing inconsistent data)
+  if (filterAge === 'Open') {
+    return recordAge === 'Open' || recordAge === 'open' || recordAge === 'O';
+  }
+  // Direct match for other categories
+  return recordAge === filterAge;
+};
+
 export const filterRecords = (
   records: PowerliftingRecord[],
   filters: FilterState
@@ -35,7 +51,7 @@ export const filterRecords = (
       }
     }
 
-    if (filters.ageCategory !== 'All' && record.ageCategory !== filters.ageCategory) {
+    if (filters.ageCategory !== 'All' && !matchesAgeCategory(record.ageCategory, filters.ageCategory)) {
       return false;
     }
 

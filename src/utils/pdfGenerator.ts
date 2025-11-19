@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import type { PowerliftingRecord } from '../types/records';
-import { WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, AGE_CATEGORIES } from '../types/records';
+import { WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, AGE_CATEGORIES_PDF } from '../types/records';
 
 interface RecordCell {
   name: string;
@@ -35,16 +35,35 @@ const LIFT_ORDER: Array<keyof typeof LIFT_LABELS> = [
   'bench_press_ac',
 ];
 
-// Determine which age categories apply to a weight class
-function getAgeCategoriesForWeightClass(weightClass: string, gender: 'M' | 'F'): string[] {
+// Normalize age category to handle existing data inconsistencies
+function normalizeAgeCategory(ageCategory: string): string {
+  const upper = ageCategory.toUpperCase();
+
+  // Map variations to standard format
+  if (upper === 'OPEN' || upper === 'O') return 'Open';
+
+  // Return as-is for other categories (already uppercase in data: U16, U18, U23, M1, etc.)
+  // J and SJ are already correct
+  return ageCategory;
+}
+
+// Determine which age categories have at least one record for this weight class
+function getPopulatedAgeCategories(
+  weightClass: string,
+  records: RecordsByWeightAndLift[string],
+  gender: 'M' | 'F'
+): string[] {
   const youthWeightClasses = gender === 'M' ? ['53kg'] : ['43kg'];
   const isYouthOnly = youthWeightClasses.includes(weightClass);
 
-  if (isYouthOnly) {
-    return ['U16', 'U18', 'U23'];
-  }
+  // Get base age categories for this weight class
+  const baseCategories = isYouthOnly ? ['U16', 'U18', 'U23'] : AGE_CATEGORIES_PDF;
 
-  return AGE_CATEGORIES.filter(cat => cat !== 'All');
+  // Filter to only include age categories that have at least one record
+  return baseCategories.filter(ageCategory => {
+    // Check if any lift has a record for this age category
+    return LIFT_ORDER.some(lift => records[lift][ageCategory] != null);
+  });
 }
 
 // Organize records by weight class and lift type
@@ -73,8 +92,11 @@ function organizeRecords(
     .forEach(record => {
       const { weightClass, lift, ageCategory, name, record: weight, dateSet } = record;
 
+      // Normalize age category to handle data inconsistencies (open/O -> Open)
+      const normalizedAge = normalizeAgeCategory(ageCategory);
+
       if (organized[weightClass] && organized[weightClass][lift]) {
-        organized[weightClass][lift][ageCategory] = {
+        organized[weightClass][lift][normalizedAge] = {
           name,
           weight,
           date: dateSet,
@@ -120,11 +142,16 @@ function generatePortraitPDF(
   let yPosition = 26;
 
   validWeightClasses.forEach((weightClass) => {
-    const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
     const records = organizedRecords[weightClass];
-    const isYouthOnly = weightClass === youthWeightClass;
-
     if (!records) return;
+
+    // Only show age categories that have at least one record
+    const ageCategories = getPopulatedAgeCategories(weightClass, records, gender);
+
+    // Skip this weight class if it has no records at all
+    if (ageCategories.length === 0) return;
+
+    const isYouthOnly = weightClass === youthWeightClass;
 
     // Calculate table height - youth classes are smaller
     const tableHeight = isYouthOnly ? 22 : 38;
@@ -213,11 +240,16 @@ function generateLandscapePDF(
   let yPosition = 26;
 
   validWeightClasses.forEach((weightClass) => {
-    const ageCategories = getAgeCategoriesForWeightClass(weightClass, gender);
     const records = organizedRecords[weightClass];
-    const isYouthOnly = weightClass === youthWeightClass;
-
     if (!records) return;
+
+    // Only show age categories that have at least one record
+    const ageCategories = getPopulatedAgeCategories(weightClass, records, gender);
+
+    // Skip this weight class if it has no records at all
+    if (ageCategories.length === 0) return;
+
+    const isYouthOnly = weightClass === youthWeightClass;
 
     // Calculate table height - youth classes are smaller
     const tableHeight = isYouthOnly ? 18 : 32;
