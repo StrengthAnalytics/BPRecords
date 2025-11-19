@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 import type { PowerliftingRecord } from '../types/records';
 import { formatDate, formatLiftName, formatEquipment } from '../utils/recordsFormatters';
 
