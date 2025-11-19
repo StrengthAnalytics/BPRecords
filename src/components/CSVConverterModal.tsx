@@ -99,11 +99,13 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
     const upper = trimmed.toUpperCase();
 
     // Map common variations and abbreviations
+    // Note: J (Junior) and SJ (Sub-Junior) are preserved as-is
+    // UI filter will handle grouping: SJ includes U16/U18/SJ, J includes U23/J
     const ageCategoryMap: { [key: string]: string } = {
       'OPEN': 'Open',
       'O': 'Open',
-      'J': 'U18',        // Junior → U18
-      'SJ': 'U16',       // Sub-Junior → U16
+      'SJ': 'SJ',        // Sub-Junior (U16-U18)
+      'J': 'J',          // Junior (U23)
       'U16': 'U16',
       'U18': 'U18',
       'U23': 'U23',
