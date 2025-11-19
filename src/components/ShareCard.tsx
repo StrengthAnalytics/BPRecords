@@ -51,10 +51,9 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(({ record }, ref) =
 
           {/* Lift Type */}
           <div className="mb-12">
-            <div className="text-6xl font-bold mb-2">
+            <div className="text-6xl font-bold">
               {formatLiftName(record.lift)}
             </div>
-            <div className="w-64 h-2 bg-white/30 mx-auto rounded-full"></div>
           </div>
 
           {/* Details */}
