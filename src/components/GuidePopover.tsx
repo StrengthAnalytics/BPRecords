@@ -97,7 +97,6 @@ const GuidePopover: React.FC = () => {
                 <li>• Click "Export PDF" to generate record sheets</li>
                 <li>• Perfect for printing and displaying at events</li>
                 <li>• Exports filtered results in competition format</li>
-                <li>• Professional formatting for official use</li>
               </ul>
             </div>
 
@@ -112,9 +111,6 @@ const GuidePopover: React.FC = () => {
               <ul className="text-sm text-gray-700 dark:text-slate-300 space-y-1 ml-7">
                 <li>• Click "Share Image" on any record card</li>
                 <li>• Generates a social media-ready image</li>
-                <li>• Optimized for Instagram Stories (9:16 ratio)</li>
-                <li>• On mobile: Opens native share menu</li>
-                <li>• On desktop: Downloads image file</li>
               </ul>
             </div>
           </div>
