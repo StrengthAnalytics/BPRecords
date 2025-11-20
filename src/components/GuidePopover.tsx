@@ -78,9 +78,11 @@ const GuidePopover: React.FC = () => {
                 Search Functions
               </h4>
               <ul className="text-sm text-gray-700 dark:text-slate-300 space-y-1 ml-7">
-                <li>• Search by lifter name in the field below</li>
+                <li>• Search using the fields below</li>
+                <li>• Searches can be with or without a specified lifter name</li>
                 <li>• Filter by gender, age, weight class, and more</li>
                 <li>• Combine multiple filters to narrow results</li>
+                <li>• Results can be shown in tile or list format</li>
                 <li>• Use "Clear All Filters" to reset your search</li>
               </ul>
             </div>
