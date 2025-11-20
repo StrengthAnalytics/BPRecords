@@ -73,7 +73,7 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-12 md:py-16">
+    <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pt-6 md:pt-8 pb-12 md:pb-16">
       <FilterPanel
         filters={filters}
         onFilterChange={updateFilter}
