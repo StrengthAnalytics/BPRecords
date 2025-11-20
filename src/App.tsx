@@ -46,7 +46,7 @@ function App() {
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 text-white py-8 md:py-12 px-4 text-center shadow-2xl">
+      <div className="bg-gradient-to-r from-red-600 to-red-700 dark:from-red-700 dark:to-red-800 text-white pt-8 md:pt-12 pb-6 md:pb-8 px-4 text-center shadow-2xl">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 tracking-tight">
             British Powerlifting Records

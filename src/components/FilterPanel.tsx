@@ -3,6 +3,7 @@ import type { FilterState } from '../types/records';
 import { REGIONS, WEIGHT_CLASSES, WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, LIFTS, AGE_CATEGORIES, EQUIPMENT_TYPES, GENDERS } from '../types/records';
 import { records } from '../data/records';
 import IconButton from './IconButton';
+import GuidePopover from './GuidePopover';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -65,6 +66,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-10 md:p-12 mb-10">
+      {/* Guide Button */}
+      <div className="mb-6">
+        <GuidePopover />
+      </div>
+
       <div className="mb-10">
         <label className={labelClass}>Search by Lifter Name</label>
         <div className="relative">
