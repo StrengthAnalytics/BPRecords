@@ -10,7 +10,7 @@ import type { PowerliftingRecord } from '../types/records';
  * 1. Edit JSON files in data-source/
  * 2. Run: npm run build:data
  *
- * Last generated: 2025-11-19T15:12:38.534Z
+ * Last generated: 2025-11-20T11:55:50.861Z
  */
 
 export const records: PowerliftingRecord[] = [
