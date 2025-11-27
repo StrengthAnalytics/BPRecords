@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PowerliftingRecord } from '../types/records';
+import type { PowerliftingRecord, UserLifts } from '../types/records';
 import RecordCard from './RecordCard';
 import Section from './Section';
 import { formatDate, formatLiftName, formatEquipment, formatGender } from '../utils/recordsFormatters';
@@ -15,6 +15,8 @@ interface ResultsDisplayProps {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
   hasActiveFilters: boolean;
+  comparisonMode?: boolean;
+  userLifts?: UserLifts;
 }
 
 const SkeletonCard: React.FC = () => (
@@ -36,7 +38,9 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
   onSortChange,
   viewMode,
   onViewModeChange,
-  hasActiveFilters
+  hasActiveFilters,
+  comparisonMode = false,
+  userLifts
 }) => {
   if (isLoading) {
     return (
@@ -224,7 +228,12 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
       ) : viewMode === 'tile' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {records.map((record, index) => (
-            <RecordCard key={`${record.name}-${record.lift}-${index}`} record={record} />
+            <RecordCard
+              key={`${record.name}-${record.lift}-${index}`}
+              record={record}
+              comparisonMode={comparisonMode}
+              userLifts={userLifts}
+            />
           ))}
         </div>
       ) : (

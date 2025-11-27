@@ -153,3 +153,28 @@ export const GENDERS = [
   'M',
   'F'
 ];
+
+// Comparison feature types
+export interface UserLifts {
+  squat?: number;
+  bench_press?: number;
+  bench_press_ac?: number;
+  deadlift?: number;
+  total?: number;
+}
+
+export interface UserProfile {
+  gender: 'M' | 'F';
+  weightClass: string;
+  ageCategory: string;
+  equipment: 'equipped' | 'unequipped';
+}
+
+export interface ComparisonState {
+  isEnabled: boolean;
+  userProfile: UserProfile | null;
+  userLifts: UserLifts;
+  selectedRegions: string[]; // empty array means all regions
+}
+
+export type ComparisonColor = 'green' | 'yellow' | 'red' | 'gray';

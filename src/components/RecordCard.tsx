@@ -1,14 +1,23 @@
 import React, { useRef, useState } from 'react';
-import type { PowerliftingRecord } from '../types/records';
+import type { PowerliftingRecord, UserLifts } from '../types/records';
 import { formatDate, formatLiftName, formatEquipment, formatGender } from '../utils/recordsFormatters';
 import ShareCard from './ShareCard';
 import { shareRecordImage } from '../utils/shareRecord';
+import {
+  getUserLift,
+  calculatePercentage,
+  getComparisonColor,
+  getComparisonColorClasses,
+  getComparisonMessage
+} from '../utils/comparisonUtils';
 
 interface RecordCardProps {
   record: PowerliftingRecord;
+  comparisonMode?: boolean;
+  userLifts?: UserLifts;
 }
 
-const RecordCard: React.FC<RecordCardProps> = ({ record }) => {
+const RecordCard: React.FC<RecordCardProps> = ({ record, comparisonMode = false, userLifts }) => {
   const shareCardRef = useRef<HTMLDivElement>(null);
   const [isSharing, setIsSharing] = useState(false);
 
@@ -26,8 +35,23 @@ const RecordCard: React.FC<RecordCardProps> = ({ record }) => {
     }
   };
 
+  // Comparison mode calculations
+  const userLift = comparisonMode && userLifts ? getUserLift(userLifts, record.lift) : null;
+  const percentage = userLift !== null ? calculatePercentage(userLift, record.record) : null;
+  const comparisonColor = getComparisonColor(percentage);
+  const colorClasses = getComparisonColorClasses(comparisonColor);
+
+  // Determine border color based on mode
+  const borderColorClass = comparisonMode && percentage !== null
+    ? colorClasses.border
+    : 'border-gray-100 dark:border-slate-700';
+
+  const hoverBorderClass = comparisonMode && percentage !== null
+    ? colorClasses.border
+    : 'hover:border-red-500 dark:hover:border-red-600';
+
   return (
-    <div className="group relative bg-white dark:bg-slate-800 rounded-2xl shadow-xl border-2 border-gray-100 dark:border-slate-700 p-8 hover:shadow-2xl hover:border-red-500 dark:hover:border-red-600 transition-all duration-300 hover:-translate-y-2">
+    <div className={`group relative bg-white dark:bg-slate-800 rounded-2xl shadow-xl border-2 ${borderColorClass} p-8 hover:shadow-2xl ${hoverBorderClass} transition-all duration-300 hover:-translate-y-2`}>
       <div className="flex justify-between items-start mb-6">
         <h3 className="font-bold text-2xl text-gray-900 dark:text-slate-50 leading-tight">
           {record.name}
@@ -41,6 +65,38 @@ const RecordCard: React.FC<RecordCardProps> = ({ record }) => {
         <div className="text-6xl font-black text-red-600 dark:text-red-500 group-hover:text-red-700 dark:group-hover:text-red-400 transition-colors">
           {record.record}<span className="text-4xl ml-1">kg</span>
         </div>
+
+        {/* Comparison Mode UI */}
+        {comparisonMode && userLift !== null && percentage !== null && (
+          <div className="mt-4 space-y-3">
+            {/* Your Lift */}
+            <div className="flex items-center justify-between text-sm">
+              <span className="font-semibold text-gray-700 dark:text-gray-300">Your lift:</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-white">{userLift}kg</span>
+            </div>
+
+            {/* Percentage Bar */}
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <span className={`text-sm font-bold ${colorClasses.text}`}>
+                  {percentage}%
+                </span>
+                {percentage >= 100 && <span className="text-lg">🎉</span>}
+              </div>
+              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
+                <div
+                  className={`h-full ${colorClasses.progressBg} transition-all duration-500 rounded-full`}
+                  style={{ width: `${Math.min(percentage, 100)}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Comparison Message */}
+            <div className={`text-xs ${colorClasses.text} font-medium`}>
+              {getComparisonMessage(userLift, record.record, record.name)}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="space-y-4">

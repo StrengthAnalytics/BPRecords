@@ -11,6 +11,8 @@ interface FilterPanelProps {
   onClear: () => void;
   hasActiveFilters: boolean;
   onPDFExport: () => void;
+  comparisonMode?: boolean;
+  onComparisonToggle?: () => void;
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -18,7 +20,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   onFilterChange,
   onClear,
   hasActiveFilters,
-  onPDFExport
+  onPDFExport,
+  comparisonMode = false,
+  onComparisonToggle
 }) => {
   const inputClass = "w-full px-4 py-4 text-base border-2 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-4 focus:ring-red-500/20 focus:border-red-500 dark:focus:ring-red-600/20 dark:focus:border-red-600 transition-all shadow-sm hover:border-red-400 dark:hover:border-red-500";
   const labelClass = "block text-base font-semibold text-gray-800 dark:text-slate-200 mb-3";
@@ -70,6 +74,39 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
       <div className="mb-6">
         <GuidePopover />
       </div>
+
+      {/* Comparison Mode Toggle - Centered */}
+      {onComparisonToggle && (
+        <div className="mb-8 flex justify-center">
+          <button
+            onClick={onComparisonToggle}
+            className={`group relative px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 ${
+              comparisonMode
+                ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white'
+                : 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 text-white hover:from-red-700 hover:to-red-800'
+            }`}
+          >
+            <span className="flex items-center gap-3">
+              {comparisonMode ? (
+                <>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  <span>Comparison Mode Active</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  <span>Compare Your Lifts</span>
+                </>
+              )}
+            </span>
+            <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
+          </button>
+        </div>
+      )}
 
       <div className="mb-10">
         <label className={labelClass}>Search by Lifter Name</label>

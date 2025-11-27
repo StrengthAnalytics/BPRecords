@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import type { RecordsHubProps } from '../types/records';
+import React, { useState, useEffect, useMemo } from 'react';
+import type { RecordsHubProps, UserProfile, UserLifts } from '../types/records';
 import { useRecordsData } from '../hooks/useRecordsData';
 import { useRecordsFilter } from '../hooks/useRecordsFilter';
 import FilterPanel from './FilterPanel';
@@ -8,6 +8,8 @@ import CSVConverterModal from './CSVConverterModal';
 import PDFExportModal from './PDFExportModal';
 import PDFErrorBoundary from './PDFErrorBoundary';
 import ErrorBoundary from './ErrorBoundary';
+import { ComparisonInputPanel } from './ComparisonInputPanel';
+import { filterRecordsForComparison } from '../utils/comparisonUtils';
 
 const RecordsHub: React.FC<RecordsHubProps> = () => {
   const { allRecords, isLoading } = useRecordsData();
@@ -27,12 +29,28 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
   const [visibleCount, setVisibleCount] = useState(20);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
+  // Comparison mode state
+  const [comparisonMode, setComparisonMode] = useState(false);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userLifts, setUserLifts] = useState<UserLifts>({});
+  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+
   // Constants for load more functionality
   const ITEMS_PER_PAGE = 20;
   const MAX_RESULTS = 100;
 
-  const totalCount = filteredRecords.length;
-  const cappedResults = filteredRecords.slice(0, MAX_RESULTS);
+  // Determine which records to show based on mode
+  const recordsToShow = useMemo(() => {
+    if (comparisonMode) {
+      // In comparison mode, show only records matching user's profile
+      return filterRecordsForComparison(allRecords, userProfile, selectedRegions);
+    }
+    // Normal mode - use filtered records from filters
+    return filteredRecords;
+  }, [comparisonMode, allRecords, userProfile, selectedRegions, filteredRecords]);
+
+  const totalCount = recordsToShow.length;
+  const cappedResults = recordsToShow.slice(0, MAX_RESULTS);
   const displayedRecords = cappedResults.slice(0, visibleCount);
   const hasMore = visibleCount < cappedResults.length;
   const remainingCount = cappedResults.length - visibleCount;
@@ -80,7 +98,21 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
         onClear={clearFilters}
         hasActiveFilters={hasActiveFilters}
         onPDFExport={() => setShowPDFExport(true)}
+        comparisonMode={comparisonMode}
+        onComparisonToggle={() => setComparisonMode(!comparisonMode)}
       />
+
+      {/* Comparison Input Panel - Sticky when comparison mode is active */}
+      {comparisonMode && (
+        <ComparisonInputPanel
+          userProfile={userProfile}
+          userLifts={userLifts}
+          selectedRegions={selectedRegions}
+          onProfileChange={setUserProfile}
+          onLiftsChange={setUserLifts}
+          onRegionsChange={setSelectedRegions}
+        />
+      )}
 
       <ErrorBoundary>
         <ResultsDisplay
@@ -92,6 +124,8 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
           viewMode={viewMode}
           onViewModeChange={setViewMode}
           hasActiveFilters={hasActiveFilters}
+          comparisonMode={comparisonMode}
+          userLifts={userLifts}
         />
       </ErrorBoundary>
 
