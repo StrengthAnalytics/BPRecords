@@ -14,6 +14,7 @@ interface ComparisonInputPanelProps {
   onProfileChange: (profile: UserProfile) => void;
   onLiftsChange: (lifts: UserLifts) => void;
   onRegionsChange: (regions: string[]) => void;
+  onReset?: () => void;
 }
 
 export function ComparisonInputPanel({
@@ -22,7 +23,8 @@ export function ComparisonInputPanel({
   selectedRegions,
   onProfileChange,
   onLiftsChange,
-  onRegionsChange
+  onRegionsChange,
+  onReset
 }: ComparisonInputPanelProps) {
   // Local state for form inputs
   const [gender, setGender] = useState<'M' | 'F'>(userProfile?.gender || 'M');
@@ -252,38 +254,55 @@ export function ComparisonInputPanel({
               </div>
             </div>
 
-            {/* Region Selection */}
+            {/* Region Selection and Reset Button */}
             {hasAnyLift && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Compare Against Regions
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={selectAllRegions}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                      selectedRegions.length === 0
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                    }`}
-                  >
-                    All Regions
-                  </button>
-                  {availableRegions.map((region) => (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Compare Against Regions
+                  </label>
+                  <div className="flex flex-wrap gap-2">
                     <button
-                      key={region}
-                      onClick={() => toggleRegion(region)}
+                      onClick={selectAllRegions}
                       className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                        selectedRegions.length > 0 && selectedRegions.includes(region)
+                        selectedRegions.length === 0
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                       }`}
                     >
-                      {region}
+                      All Regions
                     </button>
-                  ))}
+                    {availableRegions.map((region) => (
+                      <button
+                        key={region}
+                        onClick={() => toggleRegion(region)}
+                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                          selectedRegions.length > 0 && selectedRegions.includes(region)
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                        }`}
+                      >
+                        {region}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+
+                {/* Reset Button */}
+                {onReset && (
+                  <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={onReset}
+                      className="w-full px-4 py-2.5 bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      Reset All Comparison Data
+                    </button>
+                  </div>
+                )}
+              </>
             )}
 
             {!hasAnyLift && (

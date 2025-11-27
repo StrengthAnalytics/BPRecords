@@ -89,6 +89,12 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleComparisonReset = () => {
+    setUserProfile(null);
+    setUserLifts({});
+    setSelectedRegions([]);
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 pt-6 md:pt-8 pb-12 md:pb-16">
       <FilterPanel
@@ -105,6 +111,7 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
         onProfileChange={setUserProfile}
         onLiftsChange={setUserLifts}
         onRegionsChange={setSelectedRegions}
+        onComparisonReset={handleComparisonReset}
       />
 
       <ErrorBoundary>
