@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
-import type { FilterState } from '../types/records';
+import type { FilterState, UserProfile, UserLifts } from '../types/records';
 import { REGIONS, WEIGHT_CLASSES, WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, LIFTS, AGE_CATEGORIES, EQUIPMENT_TYPES, GENDERS } from '../types/records';
 import { records } from '../data/records';
 import IconButton from './IconButton';
 import GuidePopover from './GuidePopover';
+import { ComparisonInputPanel } from './ComparisonInputPanel';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -11,6 +12,16 @@ interface FilterPanelProps {
   onClear: () => void;
   hasActiveFilters: boolean;
   onPDFExport: () => void;
+  comparisonMode?: boolean;
+  onComparisonToggle?: () => void;
+  // Comparison props
+  userProfile?: UserProfile | null;
+  userLifts?: UserLifts;
+  selectedRegions?: string[];
+  onProfileChange?: (profile: UserProfile) => void;
+  onLiftsChange?: (lifts: UserLifts) => void;
+  onRegionsChange?: (regions: string[]) => void;
+  onComparisonReset?: () => void;
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -18,7 +29,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   onFilterChange,
   onClear,
   hasActiveFilters,
-  onPDFExport
+  onPDFExport,
+  comparisonMode = false,
+  onComparisonToggle,
+  userProfile,
+  userLifts,
+  selectedRegions,
+  onProfileChange,
+  onLiftsChange,
+  onRegionsChange,
+  onComparisonReset
 }) => {
   const inputClass = "w-full px-4 py-4 text-base border-2 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-4 focus:ring-red-500/20 focus:border-red-500 dark:focus:ring-red-600/20 dark:focus:border-red-600 transition-all shadow-sm hover:border-red-400 dark:hover:border-red-500";
   const labelClass = "block text-base font-semibold text-gray-800 dark:text-slate-200 mb-3";
@@ -66,11 +86,54 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <section className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-gray-100 dark:border-slate-700 p-10 md:p-12 mb-10">
-      {/* Guide Button */}
-      <div className="mb-6">
+      {/* Guide Button and Mode Toggle on same line */}
+      <div className="mb-6 flex items-center justify-between">
         <GuidePopover />
+
+        {/* Mode Toggle Switch - Compact */}
+        {onComparisonToggle && (
+          <div className="inline-flex items-center gap-1 bg-gray-100 dark:bg-slate-700 p-1 rounded-lg">
+            <button
+              onClick={() => comparisonMode && onComparisonToggle()}
+              className={`px-4 py-1.5 rounded-md font-semibold text-sm transition-all duration-300 ${
+                !comparisonMode
+                  ? 'bg-red-600 dark:bg-red-500 text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`}
+            >
+              Records
+            </button>
+            <button
+              onClick={() => !comparisonMode && onComparisonToggle()}
+              className={`px-4 py-1.5 rounded-md font-semibold text-sm transition-all duration-300 ${
+                comparisonMode
+                  ? 'bg-blue-600 dark:bg-blue-500 text-white shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`}
+            >
+              Comparison
+            </button>
+          </div>
+        )}
       </div>
 
+      {/* Conditionally show either filters or comparison inputs */}
+      {comparisonMode ? (
+        // Comparison Mode UI
+        onProfileChange && onLiftsChange && onRegionsChange && (
+          <ComparisonInputPanel
+            userProfile={userProfile || null}
+            userLifts={userLifts || {}}
+            selectedRegions={selectedRegions || []}
+            onProfileChange={onProfileChange}
+            onLiftsChange={onLiftsChange}
+            onRegionsChange={onRegionsChange}
+            onReset={onComparisonReset}
+          />
+        )
+      ) : (
+        // Normal Filter Mode UI
+        <>
       <div className="mb-10">
         <label className={labelClass}>Search by Lifter Name</label>
         <div className="relative">
@@ -208,6 +271,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </p>
         </div>
       </div>
+        </>
+      )}
     </section>
   );
 };
