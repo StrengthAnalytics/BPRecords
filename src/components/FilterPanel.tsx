@@ -94,7 +94,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         <div className="mb-8 flex justify-center">
           <div className="inline-flex items-center gap-4 bg-gray-100 dark:bg-slate-700 p-2 rounded-xl">
             <button
-              onClick={() => !comparisonMode && onComparisonToggle()}
+              onClick={() => comparisonMode && onComparisonToggle()}
               className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${
                 !comparisonMode
                   ? 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 text-white shadow-lg'
@@ -104,7 +104,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               📊 Records
             </button>
             <button
-              onClick={() => comparisonMode && onComparisonToggle()}
+              onClick={() => !comparisonMode && onComparisonToggle()}
               className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${
                 comparisonMode
                   ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white shadow-lg'

@@ -138,18 +138,53 @@ export function getComparisonMessage(
 }
 
 /**
- * Filter records to only show those matching user's profile and selected regions
+ * Get list of lift types that have user values entered
+ */
+export function getActiveLifts(userLifts: UserLifts): PowerliftingRecord['lift'][] {
+  const activeLifts: PowerliftingRecord['lift'][] = [];
+
+  if (userLifts.squat !== undefined && userLifts.squat > 0) {
+    activeLifts.push('squat');
+  }
+  if (userLifts.bench_press !== undefined && userLifts.bench_press > 0) {
+    activeLifts.push('bench_press');
+  }
+  if (userLifts.bench_press_ac !== undefined && userLifts.bench_press_ac > 0) {
+    activeLifts.push('bench_press_ac');
+  }
+  if (userLifts.deadlift !== undefined && userLifts.deadlift > 0) {
+    activeLifts.push('deadlift');
+  }
+  if (userLifts.total !== undefined && userLifts.total > 0) {
+    activeLifts.push('total');
+  }
+
+  return activeLifts;
+}
+
+/**
+ * Filter records to only show those matching user's profile, selected regions, and active lifts
  */
 export function filterRecordsForComparison(
   records: PowerliftingRecord[],
   profile: UserProfile | null,
-  selectedRegions: string[]
+  selectedRegions: string[],
+  userLifts: UserLifts
 ): PowerliftingRecord[] {
   if (!profile) return [];
+
+  // Get which lifts have values entered
+  const activeLifts = getActiveLifts(userLifts);
+
+  // If no lifts have values, don't show any records
+  if (activeLifts.length === 0) return [];
 
   return records.filter(record => {
     // Must match profile
     if (!matchesUserProfile(record, profile)) return false;
+
+    // Must be one of the lifts with user values
+    if (!activeLifts.includes(record.lift)) return false;
 
     // If no regions selected, show all
     if (selectedRegions.length === 0) return true;

@@ -41,12 +41,12 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
   // Determine which records to show based on mode
   const recordsToShow = useMemo(() => {
     if (comparisonMode) {
-      // In comparison mode, show only records matching user's profile
-      return filterRecordsForComparison(allRecords, userProfile, selectedRegions);
+      // In comparison mode, show only records matching user's profile and lifts with values
+      return filterRecordsForComparison(allRecords, userProfile, selectedRegions, userLifts);
     }
     // Normal mode - use filtered records from filters
     return filteredRecords;
-  }, [comparisonMode, allRecords, userProfile, selectedRegions, filteredRecords]);
+  }, [comparisonMode, allRecords, userProfile, selectedRegions, userLifts, filteredRecords]);
 
   const totalCount = recordsToShow.length;
   const cappedResults = recordsToShow.slice(0, MAX_RESULTS);
