@@ -56,7 +56,7 @@ const RecordCard: React.FC<RecordCardProps> = ({ record, comparisonMode = false,
         <h3 className="font-bold text-2xl text-gray-900 dark:text-slate-50 leading-tight">
           {record.name}
         </h3>
-        <span className="text-sm bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-4 py-2 rounded-full font-bold shadow-sm">
+        <span className="text-sm bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-4 py-2 rounded-full font-bold shadow-sm text-center">
           {record.region}
         </span>
       </div>
