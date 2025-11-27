@@ -70,12 +70,7 @@ export function ComparisonInputPanel({
   const hasAnyLift = Object.values(userLifts).some(v => v !== undefined && v > 0);
 
   return (
-    <div className="sticky top-0 z-20 bg-white dark:bg-gray-900 border-b-2 border-blue-500 dark:border-blue-600 shadow-lg">
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 text-center">
-          🎯 Compare Your Lifts
-        </h2>
-
+    <div>
         {/* Profile Section */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           {/* Gender */}
@@ -304,7 +299,6 @@ export function ComparisonInputPanel({
             Select your weight class to begin
           </p>
         )}
-      </div>
     </div>
   );
 }

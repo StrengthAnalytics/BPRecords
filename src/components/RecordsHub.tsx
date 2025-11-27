@@ -8,7 +8,6 @@ import CSVConverterModal from './CSVConverterModal';
 import PDFExportModal from './PDFExportModal';
 import PDFErrorBoundary from './PDFErrorBoundary';
 import ErrorBoundary from './ErrorBoundary';
-import { ComparisonInputPanel } from './ComparisonInputPanel';
 import { filterRecordsForComparison } from '../utils/comparisonUtils';
 
 const RecordsHub: React.FC<RecordsHubProps> = () => {
@@ -100,19 +99,13 @@ const RecordsHub: React.FC<RecordsHubProps> = () => {
         onPDFExport={() => setShowPDFExport(true)}
         comparisonMode={comparisonMode}
         onComparisonToggle={() => setComparisonMode(!comparisonMode)}
+        userProfile={userProfile}
+        userLifts={userLifts}
+        selectedRegions={selectedRegions}
+        onProfileChange={setUserProfile}
+        onLiftsChange={setUserLifts}
+        onRegionsChange={setSelectedRegions}
       />
-
-      {/* Comparison Input Panel - Sticky when comparison mode is active */}
-      {comparisonMode && (
-        <ComparisonInputPanel
-          userProfile={userProfile}
-          userLifts={userLifts}
-          selectedRegions={selectedRegions}
-          onProfileChange={setUserProfile}
-          onLiftsChange={setUserLifts}
-          onRegionsChange={setSelectedRegions}
-        />
-      )}
 
       <ErrorBoundary>
         <ResultsDisplay

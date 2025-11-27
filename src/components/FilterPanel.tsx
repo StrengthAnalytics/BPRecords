@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
-import type { FilterState } from '../types/records';
+import type { FilterState, UserProfile, UserLifts } from '../types/records';
 import { REGIONS, WEIGHT_CLASSES, WEIGHT_CLASSES_MALE, WEIGHT_CLASSES_FEMALE, LIFTS, AGE_CATEGORIES, EQUIPMENT_TYPES, GENDERS } from '../types/records';
 import { records } from '../data/records';
 import IconButton from './IconButton';
 import GuidePopover from './GuidePopover';
+import { ComparisonInputPanel } from './ComparisonInputPanel';
 
 interface FilterPanelProps {
   filters: FilterState;
@@ -13,6 +14,13 @@ interface FilterPanelProps {
   onPDFExport: () => void;
   comparisonMode?: boolean;
   onComparisonToggle?: () => void;
+  // Comparison props
+  userProfile?: UserProfile | null;
+  userLifts?: UserLifts;
+  selectedRegions?: string[];
+  onProfileChange?: (profile: UserProfile) => void;
+  onLiftsChange?: (lifts: UserLifts) => void;
+  onRegionsChange?: (regions: string[]) => void;
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
@@ -22,7 +30,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
   hasActiveFilters,
   onPDFExport,
   comparisonMode = false,
-  onComparisonToggle
+  onComparisonToggle,
+  userProfile,
+  userLifts,
+  selectedRegions,
+  onProfileChange,
+  onLiftsChange,
+  onRegionsChange
 }) => {
   const inputClass = "w-full px-4 py-4 text-base border-2 rounded-xl bg-white dark:bg-slate-700 text-gray-900 dark:text-slate-50 border-gray-300 dark:border-slate-600 focus:ring-4 focus:ring-red-500/20 focus:border-red-500 dark:focus:ring-red-600/20 dark:focus:border-red-600 transition-all shadow-sm hover:border-red-400 dark:hover:border-red-500";
   const labelClass = "block text-base font-semibold text-gray-800 dark:text-slate-200 mb-3";
@@ -75,39 +89,50 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         <GuidePopover />
       </div>
 
-      {/* Comparison Mode Toggle - Centered */}
+      {/* Mode Toggle Switch - Centered */}
       {onComparisonToggle && (
         <div className="mb-8 flex justify-center">
-          <button
-            onClick={onComparisonToggle}
-            className={`group relative px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 ${
-              comparisonMode
-                ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white'
-                : 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 text-white hover:from-red-700 hover:to-red-800'
-            }`}
-          >
-            <span className="flex items-center gap-3">
-              {comparisonMode ? (
-                <>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  <span>Comparison Mode Active</span>
-                </>
-              ) : (
-                <>
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
-                  <span>Compare Your Lifts</span>
-                </>
-              )}
-            </span>
-            <div className="absolute inset-0 rounded-xl bg-white opacity-0 group-hover:opacity-20 transition-opacity" />
-          </button>
+          <div className="inline-flex items-center gap-4 bg-gray-100 dark:bg-slate-700 p-2 rounded-xl">
+            <button
+              onClick={() => !comparisonMode && onComparisonToggle()}
+              className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${
+                !comparisonMode
+                  ? 'bg-gradient-to-r from-red-600 to-red-700 dark:from-red-500 dark:to-red-600 text-white shadow-lg'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`}
+            >
+              📊 Records
+            </button>
+            <button
+              onClick={() => comparisonMode && onComparisonToggle()}
+              className={`px-6 py-3 rounded-lg font-bold text-base transition-all duration-300 ${
+                comparisonMode
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-blue-600 text-white shadow-lg'
+                  : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+              }`}
+            >
+              🎯 Comparison
+            </button>
+          </div>
         </div>
       )}
 
+      {/* Conditionally show either filters or comparison inputs */}
+      {comparisonMode ? (
+        // Comparison Mode UI
+        onProfileChange && onLiftsChange && onRegionsChange && (
+          <ComparisonInputPanel
+            userProfile={userProfile || null}
+            userLifts={userLifts || {}}
+            selectedRegions={selectedRegions || []}
+            onProfileChange={onProfileChange}
+            onLiftsChange={onLiftsChange}
+            onRegionsChange={onRegionsChange}
+          />
+        )
+      ) : (
+        // Normal Filter Mode UI
+        <>
       <div className="mb-10">
         <label className={labelClass}>Search by Lifter Name</label>
         <div className="relative">
@@ -245,6 +270,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </p>
         </div>
       </div>
+        </>
+      )}
     </section>
   );
 };

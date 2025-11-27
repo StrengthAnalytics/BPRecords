@@ -3,6 +3,13 @@ import type { PowerliftingRecord, UserLifts } from '../types/records';
 import RecordCard from './RecordCard';
 import Section from './Section';
 import { formatDate, formatLiftName, formatEquipment, formatGender } from '../utils/recordsFormatters';
+import {
+  getUserLift,
+  calculatePercentage,
+  getComparisonColor,
+  getComparisonColorClasses,
+  getComparisonMessage
+} from '../utils/comparisonUtils';
 
 type ViewMode = 'tile' | 'table';
 
@@ -253,42 +260,79 @@ const ResultsDisplay: React.FC<ResultsDisplayProps> = ({
               </tr>
             </thead>
             <tbody className="bg-white dark:bg-slate-800 divide-y divide-gray-200 dark:divide-slate-700">
-              {records.map((record, index) => (
-                <tr
-                  key={`${record.name}-${record.lift}-${index}`}
-                  className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors"
-                >
-                  <td className="px-2 md:px-3 py-2 md:py-3 font-semibold text-gray-900 dark:text-slate-100 text-xs md:text-sm whitespace-nowrap">
-                    {record.name}
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 font-bold text-red-600 dark:text-red-500 text-xs md:text-sm whitespace-nowrap">
-                    {record.record}kg
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
-                    {formatLiftName(record.lift)}
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
-                    {record.weightClass}
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
-                    {formatEquipment(record.equipment)}
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
-                    {formatGender(record.gender)}
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
-                    {record.ageCategory}
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 whitespace-nowrap">
-                    <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-2 py-1 rounded-full font-bold">
-                      {record.region}
-                    </span>
-                  </td>
-                  <td className="px-2 md:px-3 py-2 md:py-3 text-gray-600 dark:text-slate-400 text-xs md:text-sm whitespace-nowrap">
-                    {formatDate(record.dateSet)}
-                  </td>
-                </tr>
-              ))}
+              {records.map((record, index) => {
+                // Comparison calculations
+                const userLift = comparisonMode && userLifts ? getUserLift(userLifts, record.lift) : null;
+                const percentage = userLift !== null ? calculatePercentage(userLift, record.record) : null;
+                const comparisonColor = getComparisonColor(percentage);
+                const colorClasses = getComparisonColorClasses(comparisonColor);
+
+                return (
+                  <React.Fragment key={`${record.name}-${record.lift}-${index}`}>
+                    <tr className="hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                      <td className="px-2 md:px-3 py-2 md:py-3 font-semibold text-gray-900 dark:text-slate-100 text-xs md:text-sm whitespace-nowrap">
+                        {record.name}
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 font-bold text-red-600 dark:text-red-500 text-xs md:text-sm whitespace-nowrap">
+                        {record.record}kg
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
+                        {formatLiftName(record.lift)}
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
+                        {record.weightClass}
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
+                        {formatEquipment(record.equipment)}
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
+                        {formatGender(record.gender)}
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 text-gray-700 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
+                        {record.ageCategory}
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 whitespace-nowrap">
+                        <span className="text-xs bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 px-2 py-1 rounded-full font-bold">
+                          {record.region}
+                        </span>
+                      </td>
+                      <td className="px-2 md:px-3 py-2 md:py-3 text-gray-600 dark:text-slate-400 text-xs md:text-sm whitespace-nowrap">
+                        {formatDate(record.dateSet)}
+                      </td>
+                    </tr>
+                    {/* Comparison Row */}
+                    {comparisonMode && userLift !== null && percentage !== null && (
+                      <tr className={`${colorClasses.bg} border-t-0`}>
+                        <td colSpan={9} className="px-2 md:px-3 py-2">
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-2 min-w-[100px]">
+                              <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">Your lift:</span>
+                              <span className="text-sm font-bold text-gray-900 dark:text-white">{userLift}kg</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className={`text-xs font-bold ${colorClasses.text}`}>
+                                  {percentage}%
+                                </span>
+                                {percentage >= 100 && <span>🎉</span>}
+                              </div>
+                              <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                                <div
+                                  className={`h-full ${colorClasses.progressBg} transition-all duration-500`}
+                                  style={{ width: `${Math.min(percentage, 100)}%` }}
+                                />
+                              </div>
+                              <div className={`text-xs ${colorClasses.text} font-medium mt-1`}>
+                                {getComparisonMessage(userLift, record.record, record.name)}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </tbody>
           </table>
         </div>
