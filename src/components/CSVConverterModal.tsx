@@ -148,18 +148,29 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
     return dateStr;
   };
 
-  const convertToJSON = (records: any[]): PowerliftingRecord[] => {
-    return records.map(record => ({
-      region: record['Region'] || record['region'] || '',
-      name: record['Name'] || record['name'] || '',
-      weightClass: normalizeWeightClass(record['Weight Class'] || record['weightClass'] || ''),
-      gender: (record['Gender'] || record['gender'] || '').toUpperCase() as 'M' | 'F',
-      lift: normalizeLift(record['Lift'] || record['lift'] || '') as any,
-      ageCategory: normalizeAgeCategory(record['Age Category'] || record['ageCategory'] || ''),
-      record: parseFloat(record['Record'] || record['record'] || '0'),
-      dateSet: parseDate(record['Date Set'] || record['dateSet'] || ''),
-      equipment: normalizeEquipment(record['Equipment'] || record['equipment'] || '') as any
-    }));
+  const convertToJSON = (records: any[]): { converted: PowerliftingRecord[]; skippedNoDate: number } => {
+    let skippedNoDate = 0;
+    const converted = records
+      .filter(record => {
+        const dateStr = record['Date Set'] || record['dateSet'] || '';
+        if (!dateStr || dateStr.trim() === '') {
+          skippedNoDate++;
+          return false; // Skip records without a date
+        }
+        return true;
+      })
+      .map(record => ({
+        region: record['Region'] || record['region'] || '',
+        name: record['Name'] || record['name'] || '',
+        weightClass: normalizeWeightClass(record['Weight Class'] || record['weightClass'] || ''),
+        gender: (record['Gender'] || record['gender'] || '').toUpperCase() as 'M' | 'F',
+        lift: normalizeLift(record['Lift'] || record['lift'] || '') as any,
+        ageCategory: normalizeAgeCategory(record['Age Category'] || record['ageCategory'] || ''),
+        record: parseFloat(record['Record'] || record['record'] || '0'),
+        dateSet: parseDate(record['Date Set'] || record['dateSet'] || ''),
+        equipment: normalizeEquipment(record['Equipment'] || record['equipment'] || '') as any
+      }));
+    return { converted, skippedNoDate };
   };
 
   const groupByRegion = (records: PowerliftingRecord[]): RegionData => {
@@ -183,11 +194,12 @@ const CSVConverterModal: React.FC<CSVConverterModalProps> = ({ isOpen, onClose }
     try {
       const text = await file.text();
       const csvData = parseCSV(text);
-      const converted = convertToJSON(csvData);
+      const { converted, skippedNoDate } = convertToJSON(csvData);
       const regionData = groupByRegion(converted);
 
       setConvertedData(regionData);
-      setStatus({ type: 'success', message: `Successfully converted ${converted.length} records from ${Object.keys(regionData).length} regions!` });
+      const skippedMsg = skippedNoDate > 0 ? ` (${skippedNoDate} rows skipped - no date set)` : '';
+      setStatus({ type: 'success', message: `Successfully converted ${converted.length} records from ${Object.keys(regionData).length} regions!${skippedMsg}` });
 
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
