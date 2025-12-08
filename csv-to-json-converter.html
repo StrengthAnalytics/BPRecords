@@ -616,6 +616,7 @@
             const { headers, records } = csvData;
             const converted = [];
             const warnings = [];
+            let skippedNoDate = 0;
 
             records.forEach((record, index) => {
                 const rowNum = index + 2; // +2 because of header row and 0-based index
@@ -623,6 +624,12 @@
                 try {
                     const rawDate = record['Date Set'] || record['dateSet'] || '';
                     const parsedDate = parseDate(rawDate);
+
+                    // Skip records without a date (unset records)
+                    if (!parsedDate || parsedDate.trim() === '') {
+                        skippedNoDate++;
+                        return; // Skip this record
+                    }
 
                     const jsonRecord = {
                         region: record['Region'] || record['region'] || '',
@@ -671,7 +678,7 @@
                 }
             });
 
-            return { converted, warnings };
+            return { converted, warnings, skippedNoDate };
         }
 
         function groupByRegion(records) {
@@ -694,13 +701,15 @@
                 try {
                     const text = e.target.result;
                     const csvData = parseCSV(text);
-                    const { converted, warnings } = convertToJSON(csvData);
+                    const { converted, warnings, skippedNoDate } = convertToJSON(csvData);
+
+                    const skippedMsg = skippedNoDate > 0 ? ` (${skippedNoDate} rows skipped - no date set)` : '';
 
                     if (warnings.length > 0) {
-                        showStatus(`Conversion completed with ${warnings.length} warnings. Please review below.`, 'warning');
+                        showStatus(`Conversion completed with ${warnings.length} warnings.${skippedMsg} Please review below.`, 'warning');
                         displayWarnings(warnings);
                     } else {
-                        showStatus(`Successfully converted ${converted.length} records with no warnings!`, 'success');
+                        showStatus(`Successfully converted ${converted.length} records with no warnings!${skippedMsg}`, 'success');
                         hideWarnings();
                     }
 
